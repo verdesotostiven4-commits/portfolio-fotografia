@@ -21,24 +21,24 @@ main .fineArtStage::after {
 
 main .fineArtStage img {
   position: absolute !important;
-  left: 52% !important;
-  bottom: 18px !important;
-  width: min(800px, 98%) !important;
+  left: 53% !important;
+  bottom: -28px !important;
+  width: min(860px, 104%) !important;
   max-width: none !important;
   height: auto !important;
   object-fit: contain !important;
   mix-blend-mode: multiply !important;
   animation: artContained 8.5s ease-in-out infinite !important;
-  filter: drop-shadow(0 30px 30px rgba(0,0,0,.09)) !important;
+  filter: drop-shadow(0 32px 32px rgba(0,0,0,.10)) !important;
   will-change: transform !important;
 }
 
 @keyframes artContained {
   0%, 100% {
-    transform: translate3d(-50%, -24px, 0) scale(.98) rotate(0deg);
+    transform: translate3d(-50%, -14px, 0) scale(1) rotate(0deg);
   }
   50% {
-    transform: translate3d(calc(-50% + 10px), -40px, 0) scale(.998) rotate(-.14deg);
+    transform: translate3d(calc(-50% + 10px), -28px, 0) scale(1.012) rotate(-.14deg);
   }
 }
 
@@ -53,8 +53,8 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: 12px !important;
-    width: min(680px, 96%) !important;
+    bottom: -24px !important;
+    width: min(730px, 102%) !important;
   }
 }
 
@@ -65,7 +65,7 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: 8px !important;
-    width: 98% !important;
+    bottom: -18px !important;
+    width: 106% !important;
   }
 }
