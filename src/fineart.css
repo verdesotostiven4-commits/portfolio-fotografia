@@ -50,7 +50,7 @@ main .fineArtStage img {
   object-fit: contain !important;
   mix-blend-mode: normal !important;
   animation: artContained 8.5s ease-in-out infinite !important;
-  filter: grayscale(1) brightness(1.24) contrast(1.22) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
+  filter: grayscale(1) brightness(1.42) contrast(1.38) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
   will-change: transform !important;
   z-index: 2 !important;
 }
