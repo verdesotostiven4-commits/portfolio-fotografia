@@ -1,0 +1,66 @@
+main .fineArtFeature {
+  background: #fff !important;
+  grid-template-columns: minmax(360px, 1.12fr) minmax(300px, .88fr) !important;
+}
+
+main .fineArtStage {
+  position: relative !important;
+  min-height: 680px !important;
+  border-radius: 46px !important;
+  background: #fff !important;
+  overflow: hidden !important;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.045), 0 34px 95px rgba(0,0,0,.07) !important;
+}
+
+main .fineArtStage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 48% 70%, rgba(0,0,0,.055), transparent 34%);
+  pointer-events: none;
+}
+
+main .fineArtStage img {
+  width: min(900px, 118%) !important;
+  max-width: none !important;
+  height: auto !important;
+  object-fit: contain !important;
+  mix-blend-mode: multiply !important;
+  animation: artContained 8s ease-in-out infinite !important;
+  filter: drop-shadow(0 30px 32px rgba(0,0,0,.12)) !important;
+  will-change: transform !important;
+}
+
+@keyframes artContained {
+  0%, 100% {
+    transform: translate3d(-10px, 8px, 0) scale(1.08) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(14px, -12px, 0) scale(1.115) rotate(-.35deg);
+  }
+}
+
+@media (max-width: 1000px) {
+  main .fineArtFeature {
+    grid-template-columns: 1fr !important;
+  }
+
+  main .fineArtStage {
+    min-height: 520px !important;
+  }
+
+  main .fineArtStage img {
+    width: min(780px, 122%) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  main .fineArtStage {
+    min-height: 380px !important;
+    border-radius: 30px !important;
+  }
+
+  main .fineArtStage img {
+    width: 128% !important;
+  }
+}
