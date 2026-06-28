@@ -14,27 +14,7 @@ main .fineArtFeature {
   margin-right: 0 !important;
   overflow: hidden !important;
   position: relative !important;
-}
-
-main .fineArtFeature::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: #fff !important;
-  z-index: 0 !important;
-  pointer-events: none !important;
-}
-
-main .fineArtFeature::after {
-  content: "" !important;
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  height: 74px !important;
-  background: #fff !important;
-  z-index: 3 !important;
-  pointer-events: none !important;
+  box-shadow: 0 0 0 100vw #fff !important;
 }
 
 main .fineArtStage,
@@ -58,30 +38,11 @@ main .fineArtStage {
   isolation: isolate !important;
 }
 
-main .fineArtStage::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  top: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 80px !important;
-  background: #fff !important;
-  z-index: 4 !important;
-  pointer-events: none !important;
-}
-
-main .fineArtStage::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  height: 72px !important;
-  background: #fff !important;
-  z-index: 4 !important;
-  pointer-events: none !important;
+main .fineArtStage::before,
+main .fineArtStage::after,
+main .fineArtFeature::before,
+main .fineArtFeature::after {
+  display: none !important;
 }
 
 main .fineArtStage img {
@@ -97,10 +58,6 @@ main .fineArtStage img {
   filter: brightness(1.11) contrast(1.09) grayscale(1) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
   will-change: transform !important;
   z-index: 2 !important;
-}
-
-main .mockRibbon {
-  background: linear-gradient(180deg, #fff 0 80px, #fffaf0 80px 100%) !important;
 }
 
 @keyframes artContained {
