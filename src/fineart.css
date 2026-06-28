@@ -8,17 +8,44 @@ main .fineArtFeature {
   margin-left: 0 !important;
   margin-right: 0 !important;
   overflow: hidden !important;
+  position: relative !important;
 }
 
-main .fineArtFeature,
+main .fineArtFeature::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: #fff !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+main .fineArtFeature::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 57% !important;
+  background: linear-gradient(90deg, #fff 0%, #fff 7%, transparent 15%, transparent 86%, #fff 96%, #fff 100%) !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+}
+
 main .fineArtStage,
-main .fineArtCopy,
-main .fineArtFeature * {
+main .fineArtCopy {
+  background: #fff !important;
   background-color: #fff !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+main .fineArtCopy > * {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 main .fineArtStage {
-  position: relative !important;
   min-height: 700px !important;
   border-radius: 0 !important;
   overflow: hidden !important;
@@ -41,8 +68,9 @@ main .fineArtStage img {
   object-fit: contain !important;
   mix-blend-mode: multiply !important;
   animation: artContained 8.5s ease-in-out infinite !important;
-  filter: brightness(1.09) contrast(1.08) grayscale(1) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
+  filter: brightness(1.11) contrast(1.09) grayscale(1) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
   will-change: transform !important;
+  z-index: 2 !important;
 }
 
 @keyframes artContained {
@@ -57,6 +85,10 @@ main .fineArtStage img {
 @media (max-width: 1000px) {
   main .fineArtFeature {
     grid-template-columns: 1fr !important;
+  }
+
+  main .fineArtFeature::after {
+    width: 100% !important;
   }
 
   main .fineArtStage {
