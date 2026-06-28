@@ -3,17 +3,24 @@ main .fineArtFeature {
   background-color: #fff !important;
   grid-template-columns: minmax(420px, 1.18fr) minmax(300px, .82fr) !important;
   column-gap: clamp(18px, 4vw, 58px) !important;
-  width: 100vw !important;
-  margin-left: calc(50% - 50vw) !important;
-  margin-right: calc(50% - 50vw) !important;
+  width: auto !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  overflow: hidden !important;
+}
+
+main .fineArtFeature,
+main .fineArtStage,
+main .fineArtCopy {
+  background: #fff !important;
+  background-color: #fff !important;
 }
 
 main .fineArtStage {
   position: relative !important;
   min-height: 700px !important;
   border-radius: 0 !important;
-  background: #fff !important;
-  background-color: #fff !important;
   overflow: hidden !important;
   box-shadow: none !important;
   isolation: isolate !important;
@@ -27,23 +34,23 @@ main .fineArtStage::after {
 main .fineArtStage img {
   position: absolute !important;
   left: 53% !important;
-  bottom: -22px !important;
-  width: min(820px, 99%) !important;
+  bottom: -18px !important;
+  width: min(780px, 94%) !important;
   max-width: none !important;
   height: auto !important;
   object-fit: contain !important;
   mix-blend-mode: multiply !important;
   animation: artContained 8.5s ease-in-out infinite !important;
-  filter: drop-shadow(0 32px 32px rgba(0,0,0,.10)) !important;
+  filter: drop-shadow(0 30px 30px rgba(0,0,0,.09)) !important;
   will-change: transform !important;
 }
 
 @keyframes artContained {
   0%, 100% {
-    transform: translate3d(-50%, -14px, 0) scale(.985) rotate(0deg);
+    transform: translate3d(-50%, -14px, 0) scale(.975) rotate(0deg);
   }
   50% {
-    transform: translate3d(calc(-50% + 10px), -28px, 0) scale(.998) rotate(-.14deg);
+    transform: translate3d(calc(-50% + 9px), -27px, 0) scale(.988) rotate(-.12deg);
   }
 }
 
@@ -58,8 +65,8 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: -20px !important;
-    width: min(700px, 98%) !important;
+    bottom: -16px !important;
+    width: min(660px, 94%) !important;
   }
 }
 
@@ -70,7 +77,7 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: -14px !important;
-    width: 102% !important;
+    bottom: -10px !important;
+    width: 98% !important;
   }
 }
