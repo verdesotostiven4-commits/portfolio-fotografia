@@ -12,8 +12,8 @@ main .fineArtFeature {
 
 main .fineArtFeature,
 main .fineArtStage,
-main .fineArtCopy {
-  background: #fff !important;
+main .fineArtCopy,
+main .fineArtFeature * {
   background-color: #fff !important;
 }
 
@@ -35,13 +35,13 @@ main .fineArtStage img {
   position: absolute !important;
   left: 53% !important;
   bottom: -18px !important;
-  width: min(780px, 94%) !important;
+  width: min(770px, 93%) !important;
   max-width: none !important;
   height: auto !important;
   object-fit: contain !important;
   mix-blend-mode: multiply !important;
   animation: artContained 8.5s ease-in-out infinite !important;
-  filter: drop-shadow(0 30px 30px rgba(0,0,0,.09)) !important;
+  filter: brightness(1.09) contrast(1.08) grayscale(1) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
   will-change: transform !important;
 }
 
@@ -66,7 +66,7 @@ main .fineArtStage img {
   main .fineArtStage img {
     left: 52% !important;
     bottom: -16px !important;
-    width: min(660px, 94%) !important;
+    width: min(650px, 93%) !important;
   }
 }
 
@@ -78,6 +78,6 @@ main .fineArtStage img {
   main .fineArtStage img {
     left: 52% !important;
     bottom: -10px !important;
-    width: 98% !important;
+    width: 96% !important;
   }
 }
