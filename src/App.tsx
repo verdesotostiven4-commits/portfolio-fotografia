@@ -31,7 +31,7 @@ function Nav({ dark = false }: { dark?: boolean }) {
         <a href="/#trabajo">Trabajo</a>
         <a href="/#servicios">Servicios</a>
         <a href="/#equipo">Equipo</a>
-        <a href={`/galerias/${clientGallery.slug}`}>Galería privada</a>
+        <a href="/#contacto">Contacto</a>
       </nav>
     </header>
   );
@@ -42,14 +42,14 @@ function PortfolioHome() {
     <main>
       <section className="homeHero">
         <Nav />
-        <div className="homeHeroBg" style={{ backgroundImage: `url(${clientGallery.cover})` }} />
+        <div className="homeHeroBg" style={{ backgroundImage: `url(${photographer.profilePhoto})` }} />
         <div className="heroOverlay" />
         <div className="homeHeroContent">
           <p className="eyebrow">{photographer.location}</p>
-          <h1>Fotografía con mirada editorial, emoción real y entrega profesional.</h1>
-          <p>Soy {photographer.name}. Trabajo eventos, quinceaños, decoración y naturaleza con una estética limpia, elegante y lista para compartir con clientes.</p>
+          <h1>Fotografía cinematográfica, elegante y real.</h1>
+          <p>Soy {photographer.name}. Creo imágenes para eventos, decoración, retratos y naturaleza con una estética premium y una entrega profesional.</p>
           <div className="heroActions">
-            <a className="button primary" href={`/galerias/${clientGallery.slug}`}>Ver galería privada</a>
+            <a className="button primary" href="#trabajo">Explorar portafolio</a>
             <a className="button ghost" href={photographer.instagramUrl} target="_blank" rel="noreferrer">Instagram {photographer.handle}</a>
           </div>
         </div>
@@ -58,9 +58,9 @@ function PortfolioHome() {
       <section className="section introGrid" id="trabajo">
         <div>
           <p className="eyebrow">Portafolio</p>
-          <h2>Una web para vender confianza antes de vender fotos.</h2>
+          <h2>Una mirada editorial para eventos, marcas y naturaleza.</h2>
         </div>
-        <p className="lead">La experiencia está pensada para que el cliente vea una entrega cuidada: portada, historia, fotos seleccionadas, botón de contacto y descarga con PIN para previews.</p>
+        <p className="lead">La página pública queda enfocada solo en tu marca. Las galerías de cliente existen en links aparte y no aparecen aquí como botones públicos.</p>
       </section>
 
       <section className="highlightGrid">
@@ -73,12 +73,12 @@ function PortfolioHome() {
       </section>
 
       <section className="section split" id="servicios">
-        <div><p className="eyebrow">Servicios</p><h2>Paquetes pensados para evento, decoración y entrega digital.</h2></div>
+        <div><p className="eyebrow">Servicios</p><h2>Fotos pensadas para verse premium desde el primer segundo.</h2></div>
         <div className="serviceList">{services.map((service) => <span key={service}>{service}</span>)}</div>
       </section>
 
       <section className="section about" id="equipo">
-        <div className="aboutPhoto"><SmartImage src={photographer.profilePhoto} alt={`${photographer.name}, fotógrafo`} /></div>
+        <div className="aboutPhoto"><SmartImage src={photographer.portraitPhoto} alt={`${photographer.name}, fotógrafo`} /></div>
         <div>
           <p className="eyebrow">Detrás de cámara</p>
           <h2>{photographer.name}</h2>
@@ -86,11 +86,6 @@ function PortfolioHome() {
           <div className="gear">{photographer.gear.map((item) => <span key={item}>{item}</span>)}</div>
           <a className="button primary" href={whatsappLink("Hola Stiven, vi tu portafolio y quiero información sobre fotografía.")} target="_blank" rel="noreferrer">Cotizar por WhatsApp</a>
         </div>
-      </section>
-
-      <section className="section privatePreview">
-        <div><p className="eyebrow">Entrega privada</p><h2>Galería: {clientGallery.title}</h2><p>{clientGallery.intro}</p></div>
-        <a className="button primary" href={`/galerias/${clientGallery.slug}`}>Abrir galería</a>
       </section>
     </main>
   );
@@ -199,10 +194,9 @@ function slugify(text: string) {
   return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 }
 
-function fallbackSvg(label: string, subtitle = "preview pendiente") {
+function fallbackSvg(label: string) {
   const safeLabel = encodeURIComponent(label);
-  const safeSubtitle = encodeURIComponent(subtitle);
-  return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1600'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%23090909'/><stop offset='.45' stop-color='%23201918'/><stop offset='1' stop-color='%23d9a441'/></linearGradient></defs><rect width='1200' height='1600' fill='url(%23g)'/><circle cx='980' cy='240' r='220' fill='%23f2b8c9' opacity='.22'/><circle cx='180' cy='1380' r='260' fill='%239c72ff' opacity='.16'/><text x='80' y='1260' fill='%23f4db9d' font-family='Arial' font-size='58' font-weight='700'>${safeLabel}</text><text x='80' y='1340' fill='white' opacity='.72' font-family='Arial' font-size='32'>${safeSubtitle}</text><text x='80' y='1435' fill='white' opacity='.38' font-family='Arial' font-size='26'>byStiven · colocar enlace real en src/data.ts</text></svg>`;
+  return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1600'><rect width='1200' height='1600' fill='%23090909'/><text x='80' y='1340' fill='%23f4db9d' font-family='Arial' font-size='54'>${safeLabel}</text></svg>`;
 }
 
 function SmartImage({ src, alt, className, loading = "lazy" }: { src: string; alt: string; className?: string; loading?: "lazy" | "eager" }) {
