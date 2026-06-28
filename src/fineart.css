@@ -7,7 +7,6 @@ main .fineArtFeature {
   position: relative !important;
 }
 
-main .fineArtStage,
 main .fineArtCopy {
   background: #fff !important;
   background-color: #fff !important;
@@ -20,6 +19,12 @@ main .fineArtStage {
   overflow: hidden !important;
   box-shadow: none !important;
   isolation: isolate !important;
+  position: relative !important;
+  background-color: #fff !important;
+  background-image: url("https://blogger.googleusercontent.com/img/a/AVvXsEgc1i0bIxu2lZ9MH-dUSFVFSOHeNpfAfwPp43wfjmQ8r4tye_zTFg00-uiWCH84VDMEVLIzcjTzMEavWYVekbRsn_W8JxiAwwCgvXhdhGBq_NdihK5dkeVHlbWfyfRoiJpYDeH2ueU_ifYrXcqzyhUHEjjxkkd_IPMWenKTrV7BdQHjdXSmqo-HMj0MrVg") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
 }
 
 main .fineArtStage::before,
