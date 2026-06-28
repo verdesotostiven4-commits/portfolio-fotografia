@@ -1,20 +1,10 @@
-html,
-body {
-  background-color: #fff !important;
-}
-
 main .fineArtFeature {
   background: #fff !important;
   background-color: #fff !important;
   grid-template-columns: minmax(420px, 1.18fr) minmax(300px, .82fr) !important;
   column-gap: clamp(18px, 4vw, 58px) !important;
-  width: auto !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
   overflow: hidden !important;
   position: relative !important;
-  box-shadow: 0 0 0 100vw #fff !important;
 }
 
 main .fineArtStage,
@@ -22,12 +12,6 @@ main .fineArtCopy {
   background: #fff !important;
   background-color: #fff !important;
   position: relative !important;
-  z-index: 1 !important;
-}
-
-main .fineArtCopy > * {
-  background: transparent !important;
-  background-color: transparent !important;
 }
 
 main .fineArtStage {
@@ -42,7 +26,13 @@ main .fineArtStage::before,
 main .fineArtStage::after,
 main .fineArtFeature::before,
 main .fineArtFeature::after {
+  content: none !important;
   display: none !important;
+}
+
+main .fineArtCopy > * {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 main .fineArtStage img {
@@ -53,9 +43,9 @@ main .fineArtStage img {
   max-width: none !important;
   height: auto !important;
   object-fit: contain !important;
-  mix-blend-mode: multiply !important;
+  mix-blend-mode: normal !important;
   animation: artContained 8.5s ease-in-out infinite !important;
-  filter: brightness(1.11) contrast(1.09) grayscale(1) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
+  filter: grayscale(1) brightness(1.24) contrast(1.22) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
   will-change: transform !important;
   z-index: 2 !important;
 }
