@@ -22,11 +22,13 @@ export const photographer = {
   handle: "@bystiven",
   location: "Galápagos · Ecuador",
   instagramUrl: "https://www.instagram.com/bystiven/",
-  whatsappNumber: "593000000000",
+  whatsappNumber: "593968257817",
   tagline: "Fotografía editorial de eventos, decoración, retrato, naturaleza y vida salvaje.",
   gear: ["Sony A7C", "100-400mm F4/5.6", "24mm F1.4"],
   profilePhoto: "https://blogger.googleusercontent.com/img/a/AVvXsEgAnF9SVeIrNupzkphruohtFaPDyF4lb7oKFbUyOkZPSWebRmjVQpZJvw3ZoMFZMbsgaqqt4mup8sABVBhYkigQjwRnzZdXzgSE9TOBQdzVH5W4QL3liFCbRw-_4YtNtjccBlD6FExc9uYlVWFrkaY_8m8XoWchocosdLHnfwxCSdpPrhW8vYeEDraqRQQ",
   portraitPhoto: "https://blogger.googleusercontent.com/img/a/AVvXsEjfAJe7673Ulq5xldKwjxm7oiLeW-08F72f0UT7zLpn5Ojgqo-iggrvJD2rLavQwlQvUT1XBiqdQ_Ml_ZdoGMD-NuKnFwnQnHQFW7c52PPYq-jdkfVLtjss0SX9kLxB_qaXi8zNXEItusdyo1ni_8tm64AE8MHnJ9nY4jdYK3rQiPC5UW6-KLa2eS1nmE0",
+  heroBackground: "https://blogger.googleusercontent.com/img/a/AVvXsEgJa5DmqcI1heZCqjHzeWoLQ02zEB3nL4RuUbQ7rBNH5byRsNss7Ztrn4ADO3KW7SsyaX2RqFJGnRuCib8S_8rwM2Mn7FlyLH5h9ME_8iIW_PhHNT9k66W73Auwp_kQQ6yW2k_KQsOKa1c2o5UHKeyAx8__7z-d61YEXs4qgflltwJOxyt4l326-3d7S8E",
+  heroSubject: "https://blogger.googleusercontent.com/img/a/AVvXsEigVZBtLcvw0qlA8aOjLAwCQQoXtAt2Q29Mf101IqoPEnTB_1xc00D3VrCHuYiTgE7Ni-hvSzmem3r9xp30BmYNVPSNreprkTDYM1vW5uuAjgL18giyHl45lAhNmporBeDAgu1bZi7LLOODJiMj2w3UeEI6tMURFo6suZdbRZRaLbF-1mddfewo-5E3mUw",
 };
 
 export const clientGallery = {
@@ -63,7 +65,7 @@ const sg = {
   "21": "https://blogger.googleusercontent.com/img/a/AVvXsEjla2sLOYUJbqRfQekp09CYvrZMeHxtjoXCHZtyJ14ZxiUaxQRp3HjtPTnTYQyDd4omV3vrLpW_AQUQnKyZVJIL1ueRtZ23L6EY2A_efVkc9D2mlJ7fGKBNKkf-m74Wa-U-KptS9odQ2n7bKWg8FeCkfSoJ2O1Ny3pQWHqZre79dBsBdUTbrI3adliHCSs",
   "22": "https://blogger.googleusercontent.com/img/a/AVvXsEgvPpw-wmn30MXbEe7BshzPJvcR9PsvSoPuFjnVb27rVKY4eYjvZQKXV0FxIC763_g7Dh5repy4VkIv5jQN6NywqU9geoOqYFbTgV5OPtXLD5YuOCjBU2BPiLrY-DyzF8KMGeEHYiHiZlI7h28HUvI_xaOrjYstgTbvcQaaRAedYlpMtQ_1Y2yIr3Gi-tM",
   "23": "https://blogger.googleusercontent.com/img/a/AVvXsEgFuLdqO_QEW6vnECacFBOvt5soQ5BRtp1YatcDTmQnf9rq-wL0huq4IJ6niAF7J0T18A2SYP1v0U0OGtMi6XBNPFj_x4SWYhzDM6SVFidH2osHz8nBCCe_tzS_Hyh8IiARAU9MWQYHfULy0-jxZoKQk5PqG31CbWGGR3o0L9d6eSHwzw9MyRTFZqM5QCY",
-  "24": "/images/sg15/sg15-24.webp",
+  "24": "https://blogger.googleusercontent.com/img/a/AVvXsEgFuLdqO_QEW6vnECacFBOvt5soQ5BRtp1YatcDTmQnf9rq-wL0huq4IJ6niAF7J0T18A2SYP1v0U0OGtMi6XBNPFj_x4SWYhzDM6SVFidH2osHz8nBCCe_tzS_Hyh8IiARAU9MWQYHfULy0-jxZoKQk5PqG31CbWGGR3o0L9d6eSHwzw9MyRTFZqM5QCY",
 };
 
 export const eventPhotos: GalleryPhoto[] = [
