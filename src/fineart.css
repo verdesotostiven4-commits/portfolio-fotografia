@@ -21,9 +21,9 @@ main .fineArtStage::after {
 
 main .fineArtStage img {
   position: absolute !important;
-  left: 54% !important;
-  bottom: -92px !important;
-  width: min(980px, 118%) !important;
+  left: 53% !important;
+  bottom: -36px !important;
+  width: min(890px, 108%) !important;
   max-width: none !important;
   height: auto !important;
   object-fit: contain !important;
@@ -35,10 +35,10 @@ main .fineArtStage img {
 
 @keyframes artContained {
   0%, 100% {
-    transform: translate3d(-50%, 0, 0) scale(1.02) rotate(0deg);
+    transform: translate3d(-50%, -10px, 0) scale(1) rotate(0deg);
   }
   50% {
-    transform: translate3d(calc(-50% + 14px), -14px, 0) scale(1.045) rotate(-.18deg);
+    transform: translate3d(calc(-50% + 12px), -24px, 0) scale(1.018) rotate(-.16deg);
   }
 }
 
@@ -53,8 +53,8 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: -78px !important;
-    width: min(820px, 112%) !important;
+    bottom: -32px !important;
+    width: min(760px, 104%) !important;
   }
 }
 
@@ -65,7 +65,7 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: -56px !important;
-    width: 118% !important;
+    bottom: -24px !important;
+    width: 110% !important;
   }
 }
