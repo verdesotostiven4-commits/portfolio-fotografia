@@ -1,3 +1,8 @@
+html,
+body {
+  background-color: #fff !important;
+}
+
 main .fineArtFeature {
   background: #fff !important;
   background-color: #fff !important;
@@ -23,11 +28,11 @@ main .fineArtFeature::before {
 main .fineArtFeature::after {
   content: "" !important;
   position: absolute !important;
-  top: 0 !important;
-  bottom: 0 !important;
   left: 0 !important;
-  width: 57% !important;
-  background: linear-gradient(90deg, #fff 0%, #fff 7%, transparent 15%, transparent 86%, #fff 96%, #fff 100%) !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 74px !important;
+  background: #fff !important;
   z-index: 3 !important;
   pointer-events: none !important;
 }
@@ -53,9 +58,30 @@ main .fineArtStage {
   isolation: isolate !important;
 }
 
-main .fineArtStage::before,
+main .fineArtStage::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 80px !important;
+  background: #fff !important;
+  z-index: 4 !important;
+  pointer-events: none !important;
+}
+
 main .fineArtStage::after {
-  display: none !important;
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 72px !important;
+  background: #fff !important;
+  z-index: 4 !important;
+  pointer-events: none !important;
 }
 
 main .fineArtStage img {
@@ -73,6 +99,10 @@ main .fineArtStage img {
   z-index: 2 !important;
 }
 
+main .mockRibbon {
+  background: linear-gradient(180deg, #fff 0 80px, #fffaf0 80px 100%) !important;
+}
+
 @keyframes artContained {
   0%, 100% {
     transform: translate3d(-50%, -14px, 0) scale(.975) rotate(0deg);
@@ -85,10 +115,6 @@ main .fineArtStage img {
 @media (max-width: 1000px) {
   main .fineArtFeature {
     grid-template-columns: 1fr !important;
-  }
-
-  main .fineArtFeature::after {
-    width: 100% !important;
   }
 
   main .fineArtStage {
