@@ -10,10 +10,11 @@ export default function App() {
 }
 
 function Nav({ dark = false }: { dark?: boolean }) {
-  return <header className={`nav ${dark ? "navDark" : ""}`}><a className="logo" href="/"><span>by</span>Stiven</a><nav><a href="/#trabajo">Trabajo</a><a href="/#servicios">Servicios</a><a href="/#equipo">Equipo</a><a href="/#contacto">Contacto</a></nav></header>;
+  return <header className={`nav ${dark ? "navDark" : ""}`}><a className="logo" href="/"><span>by</span>Stiven</a><nav><a href="/#trabajo">Trabajo</a><a href="/#coleccion">Colección</a><a href="/#servicios">Servicios</a><a href="/#equipo">Equipo</a><a href="/#contacto">Contacto</a></nav></header>;
 }
 
 function PortfolioHome() {
+  const showreel = eventPhotos.slice(0, 10);
   return (
     <main>
       <section className="homeHero">
@@ -28,9 +29,12 @@ function PortfolioHome() {
           <div className="heroActions"><a className="button primary" href="#trabajo">Explorar portafolio</a><a className="button ghost" href={photographer.instagramUrl} target="_blank" rel="noreferrer">Instagram {photographer.handle}</a></div>
         </div>
       </section>
-      <section className="section introGrid" id="trabajo"><div><p className="eyebrow">Portafolio</p><h2>Una mirada editorial para eventos, marcas y naturaleza.</h2></div><p className="lead">La página pública queda enfocada solo en tu marca. Las galerías de cliente existen en links aparte y no aparecen aquí como botones públicos.</p></section>
+      <section className="section introGrid" id="trabajo"><div><p className="eyebrow">Portafolio</p><h2>Una mirada editorial para eventos, marcas y naturaleza.</h2></div><p className="lead">Una experiencia visual construida para vender confianza: impacto rápido, orden profesional, movimiento suave y una selección que no se siente como relleno.</p></section>
+      <section className="showreel" aria-label="Showreel visual"><div className="showreelTrack">{[...showreel, ...showreel].map((photo, index) => <figure key={`${photo.code}-${index}`}><img src={photo.src} alt={photo.title} /><figcaption>{photo.code}</figcaption></figure>)}</div></section>
       <section className="highlightGrid">{portfolioHighlights.map((item) => <article className="highlightCard" key={item.title}><img src={item.image} alt={item.title} /><div><h3>{item.title}</h3><p>{item.description}</p></div></article>)}</section>
+      <section className="section reviewPreview" id="coleccion"><div><p className="eyebrow">Revisión visual</p><h2>24 fotos cargadas para revisar.</h2><p>Esta cuadrícula sirve para ver rápido cuál imagen falta o cuál se repitió. Cuando me pases el último link, reemplazo la repetida.</p><a className="button primary" href={`/galerias/${clientGallery.slug}#galeria`}>Abrir galería completa</a></div><div className="reviewGrid">{eventPhotos.map((photo) => <a href={`/galerias/${clientGallery.slug}#galeria`} key={photo.code}><img src={photo.src} alt={photo.title} /><span>{photo.code}</span></a>)}</div></section>
       <section className="section split" id="servicios"><div><p className="eyebrow">Servicios</p><h2>Fotos pensadas para verse premium desde el primer segundo.</h2></div><div className="serviceList">{services.map((s) => <span key={s}>{s}</span>)}</div></section>
+      <section className="section process"><article><span>01</span><h3>Dirección</h3><p>Ordeno la historia para que el cliente vea primero impacto, emoción y calidad.</p></article><article><span>02</span><h3>Edición</h3><p>Color, luz y contraste con estética natural, elegante y comercial.</p></article><article><span>03</span><h3>Entrega</h3><p>Galerías limpias, privadas y listas para revisar, compartir o comprar.</p></article></section>
       <section className="section about" id="equipo"><div className="aboutPhoto"><img src={photographer.portraitPhoto} alt={`${photographer.name}, fotógrafo`} /></div><div><p className="eyebrow">Detrás de cámara</p><h2>{photographer.name}</h2><p className="lead">{photographer.tagline}</p><div className="gear">{photographer.gear.map((g) => <span key={g}>{g}</span>)}</div><a className="button primary" href={wa("Hola Stiven, vi tu portafolio y quiero información sobre fotografía.")} target="_blank" rel="noreferrer">Cotizar por WhatsApp</a></div></section>
     </main>
   );
