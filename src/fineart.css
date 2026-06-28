@@ -1,7 +1,11 @@
 main .fineArtFeature {
   background: #fff !important;
+  background-color: #fff !important;
   grid-template-columns: minmax(420px, 1.18fr) minmax(300px, .82fr) !important;
   column-gap: clamp(18px, 4vw, 58px) !important;
+  width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
 }
 
 main .fineArtStage {
@@ -9,6 +13,7 @@ main .fineArtStage {
   min-height: 700px !important;
   border-radius: 0 !important;
   background: #fff !important;
+  background-color: #fff !important;
   overflow: hidden !important;
   box-shadow: none !important;
   isolation: isolate !important;
@@ -22,8 +27,8 @@ main .fineArtStage::after {
 main .fineArtStage img {
   position: absolute !important;
   left: 53% !important;
-  bottom: -28px !important;
-  width: min(860px, 104%) !important;
+  bottom: -22px !important;
+  width: min(820px, 99%) !important;
   max-width: none !important;
   height: auto !important;
   object-fit: contain !important;
@@ -35,10 +40,10 @@ main .fineArtStage img {
 
 @keyframes artContained {
   0%, 100% {
-    transform: translate3d(-50%, -14px, 0) scale(1) rotate(0deg);
+    transform: translate3d(-50%, -14px, 0) scale(.985) rotate(0deg);
   }
   50% {
-    transform: translate3d(calc(-50% + 10px), -28px, 0) scale(1.012) rotate(-.14deg);
+    transform: translate3d(calc(-50% + 10px), -28px, 0) scale(.998) rotate(-.14deg);
   }
 }
 
@@ -53,8 +58,8 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: -24px !important;
-    width: min(730px, 102%) !important;
+    bottom: -20px !important;
+    width: min(700px, 98%) !important;
   }
 }
 
@@ -65,7 +70,7 @@ main .fineArtStage img {
 
   main .fineArtStage img {
     left: 52% !important;
-    bottom: -18px !important;
-    width: 106% !important;
+    bottom: -14px !important;
+    width: 102% !important;
   }
 }
