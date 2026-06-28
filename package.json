@@ -1,4 +1,6 @@
 {
+  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -7,9 +9,12 @@
   "dependencies": {
     "@vitejs/plugin-react": "latest",
     "vite": "latest",
-    "typescript": "latest",
     "react": "latest",
     "react-dom": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/react": "latest",
+    "@types/react-dom": "latest"
+  }
 }
