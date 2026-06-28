@@ -1,0 +1,8 @@
+main .fineArtStage {
+  background-color: #fff !important;
+  box-shadow: inset 38px 0 34px #fff, inset -38px 0 34px #fff, inset 0 -46px 36px #fff !important;
+}
+
+main .fineArtStage img {
+  filter: grayscale(1) brightness(1.18) contrast(1.18) drop-shadow(0 30px 30px rgba(0,0,0,.08)) !important;
+}
