@@ -16,3 +16,15 @@ html body main #experiencias .studioHead > p:last-child { font-size: 0 !importan
 html body main #experiencias .studioHead > p:last-child::after { content: "Bodas, quinceaños, sesiones y naturaleza organizadas como series limpias, elegantes y fáciles de explorar."; display: block; font-size: 18px; line-height: 1.65; color: rgba(255,255,255,.66); }
 html body .storyModalInfo p { font-size: 0 !important; }
 html body .storyModalInfo p::after { content: "Selección ampliada de la colección, pensada para apreciar composición, color, luz y estilo de entrega."; display: block; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.68); }
+html body main #experiencias { padding-top: clamp(34px,4vw,58px) !important; }
+html body main #experiencias .portfolioIndexHead { max-width: 1420px !important; margin-bottom: 14px !important; grid-template-columns: minmax(260px,.62fr) minmax(420px,.82fr) !important; gap: clamp(16px,4vw,42px) !important; align-items: center !important; }
+html body main #experiencias .portfolioIndexHead h2 { font-size: clamp(32px,3.85vw,58px) !important; line-height: .94 !important; letter-spacing: -.055em !important; max-width: 660px !important; margin-bottom: 0 !important; }
+html body main #experiencias .portfolioIndexHead p:last-child { font-size: 15px !important; line-height: 1.48 !important; max-width: 520px !important; margin-top: 0 !important; }
+html body main #experiencias .portfolioFilters { margin-top: 8px !important; margin-bottom: 12px !important; max-width: 1420px !important; }
+html body main #experiencias .portfolioFeature { max-width: 1420px !important; min-height: 315px !important; height: 315px !important; margin-bottom: 16px !important; }
+html body main #experiencias .featureCopy { min-height: 315px !important; padding: clamp(20px,3vw,30px) !important; max-width: 610px !important; }
+html body main #experiencias .featureCopy h3 { font-size: clamp(36px,4.5vw,64px) !important; margin: 8px 0 !important; }
+html body main #experiencias .featureCopy p { font-size: 15px !important; line-height: 1.46 !important; max-width: 520px !important; }
+html body main #experiencias .featureTags { margin-top: 14px !important; }
+html body main #experiencias .featureTags span { padding: 8px 11px !important; font-size: 11px !important; }
+html body main img[src*="Ej6J_47LdNE62q5EMe3kdjYQnynq9Kcx3"], html body main img[src*="EjfAJe7673Ulq5xldKwjxm7oiLeW-08F72f0UT7zLpn5Ojgqo"] { background:#000 !important; filter: grayscale(1) contrast(1.08) brightness(.9) !important; -webkit-mask-image: radial-gradient(ellipse at 50% 43%, black 34%, rgba(0,0,0,.88) 58%, rgba(0,0,0,.42) 78%, transparent 100%) !important; mask-image: radial-gradient(ellipse at 50% 43%, black 34%, rgba(0,0,0,.88) 58%, rgba(0,0,0,.42) 78%, transparent 100%) !important; box-shadow: inset 0 0 80px 34px rgba(0,0,0,.95) !important; }
