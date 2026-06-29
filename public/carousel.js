@@ -14,88 +14,87 @@
     document.head.appendChild(style);
   }
 
-  function addPortfolioExplorer() {
+  function addPortfolioGallery() {
     if (document.getElementById('experiencias')) return;
     var anchor = document.querySelector('.collectionPanels');
-    if (!anchor || !anchor.parentNode) { window.setTimeout(addPortfolioExplorer, 250); return; }
+    if (!anchor || !anchor.parentNode) { window.setTimeout(addPortfolioGallery, 250); return; }
 
-    var seaLion = 'https://blogger.googleusercontent.com/img/a/AVvXsEijmDWn4oCDM4prrw9f1pezhlyJJVqI4Mpe2xmRwzxMfWypqpEilpAhg54z_ZXUfbZXto-QPVC02H-SUQFT5T0WULTbHma6hODuKZVRJnBG2royWc0m-c1QqXpzSQ3nxQ43-RTYrdnn4Wb3RlROi0QoOKLOXb7c69wPYkvbMhaLEYFQTECs7stnJRBr7WI';
-    function img(seed, index, w, h) {
-      if (seed === 'sea-lion') return seaLion;
-      return 'https://picsum.photos/seed/bystiven-' + seed + '-' + index + '/' + (w || 1200) + '/' + (h || 1500);
+    function lf(tags, lock, w, h) {
+      return 'https://loremflickr.com/' + (w || 1200) + '/' + (h || 1500) + '/' + tags + '?lock=' + lock;
     }
+    var seaLion = 'https://blogger.googleusercontent.com/img/a/AVvXsEijmDWn4oCDM4prrw9f1pezhlyJJVqI4Mpe2xmRwzxMfWypqpEilpAhg54z_ZXUfbZXto-QPVC02H-SUQFT5T0WULTbHma6hODuKZVRJnBG2royWc0m-c1QqXpzSQ3nxQ43-RTYrdnn4Wb3RlROi0QoOKLOXb7c69wPYkvbMhaLEYFQTECs7stnJRBr7WI';
 
-    var albums = [
-      { title:'Bodas', count:10, cover:'wedding-editorial', intro:'Una historia de principio a fin: preparación, ceremonia, pareja, detalles y fiesta.', tags:['Preparación','Ceremonia','Pareja','Fiesta'], photos:['prep-wedding','bride-window','wedding-rings','ceremony-light','couple-sunset','wedding-table','first-dance','party-light','family-wedding','wedding-exit'] },
-      { title:'Quinceaños', count:15, cover:'quince-cover', intro:'Retratos, vestido, entrada, vals, familia, amigas y fiesta con entrega tipo galería premium.', tags:['Vestido','Retratos','Vals','Familia'], photos:['quince-dress','quince-window','quince-crown','quince-entry','quince-portrait','quince-vals','quince-family','quince-friends','quince-decor','quince-party','quince-night','quince-detail','quince-stage','quince-mom','quince-editorial'] },
-      { title:'Sesiones', count:7, cover:'portrait-cover', intro:'Sesiones personales, urbanas, editoriales o de marca con dirección de pose y estética limpia.', tags:['Editorial','Urbano','Marca','Pareja'], photos:['portrait-editorial','urban-session','brand-session','studio-light','couple-session','city-portrait','product-brand'] },
-      { title:'Naturaleza', count:28, cover:'sea-lion', intro:'Fauna, paisaje y aventura en Galápagos con una mirada documental y fine art.', tags:['Fauna','Paisaje','Aventura','Fine art'], photos:['sea-lion','wildlife-bird','galapagos-coast','island-sunset','iguana','turtle','cliffs','boat-trip','trail','black-white-nature','ocean-rock','nature-detail','bird-flight','lava-coast','green-island','sunset-bay'] }
+    var galleries = [
+      { title:'Bodas', count:10, tag:'Wedding Story', desc:'Preparación, ceremonia, retratos de pareja, detalles y fiesta con una lectura elegante y emocional.', query:'wedding,couple', locks:[101,102,103,104,105,106,107,108,109,110], labels:['Preparación','Ceremonia','Pareja','Detalles','Fiesta'] },
+      { title:'Quinceaños', count:15, tag:'Quince Story', desc:'Vestido, retratos, entrada, vals, familia, amigas y celebración con entrega de galería premium.', query:'birthday,dress,party', locks:[201,202,203,204,205,206,207,208,209,210,211,212,213,214,215], labels:['Vestido','Retratos','Vals','Familia','Fiesta'] },
+      { title:'Sesiones', count:7, tag:'Portrait Session', desc:'Retratos personales, editoriales, urbanos o de marca con dirección de pose, luz y composición.', query:'portrait,model', locks:[301,302,303,304,305,306,307], labels:['Editorial','Urbano','Marca','Retrato'] },
+      { title:'Naturaleza', count:28, tag:'Galápagos Nature', desc:'Fauna, paisaje y aventura con mirada documental, estética limpia y composición fine art.', query:'galapagos,wildlife,nature', locks:[401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416], labels:['Fauna','Paisaje','Aventura','Fine art'], custom:[seaLion] }
     ];
 
     var active = 0;
     var modalIndex = 0;
+    function photo(g, i, w, h) {
+      if (g.custom && g.custom[i]) return g.custom[i];
+      return lf(g.query, g.locks[i % g.locks.length], w, h);
+    }
 
     var section = document.createElement('section');
     section.id = 'experiencias';
-    section.className = 'portfolioStudio';
-    section.innerHTML = '<div class="studioHead"><p class="eyebrow">Colecciones del portafolio</p><h2>El cliente entra, curiosea y entiende rápido lo que haces.</h2><p>En vez de una sola galería plana, cada servicio se presenta como una colección editorial con mini recorrido visual.</p></div><div class="albumDeck"></div><div class="albumWall"></div>';
+    section.className = 'portfolioIndex';
+    section.innerHTML = '<div class="portfolioIndexHead"><p class="eyebrow">Portafolio seleccionado</p><h2>Historias completas, organizadas por servicio.</h2><p>Bodas, quinceaños, sesiones y naturaleza presentadas como colecciones visuales reales.</p></div><div class="portfolioFilters"></div><div class="portfolioFeature"></div><div class="portfolioMasonry"></div>';
     anchor.parentNode.insertBefore(section, anchor.nextSibling);
 
     var css = document.createElement('style');
-    css.id = 'portfolio-studio-style';
+    css.id = 'portfolio-index-style';
     css.textContent = [
-      '.portfolioStudio{position:relative;overflow:hidden;background:#080706;color:#fff;padding:clamp(76px,8vw,124px) clamp(18px,6vw,86px)}',
-      '.portfolioStudio:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 14% 8%,rgba(216,162,58,.14),transparent 30%),linear-gradient(180deg,#080706 0%,#0f0d0a 55%,#080706 100%);pointer-events:none}',
-      '.studioHead{position:relative;max-width:1120px;margin:0 auto 34px;display:grid;grid-template-columns:minmax(260px,.9fr) minmax(280px,.72fr);gap:clamp(20px,4vw,58px);align-items:end}.studioHead .eyebrow{color:var(--gold2)}.studioHead h2{font-size:clamp(38px,5vw,78px);max-width:780px}.studioHead p:last-child{color:rgba(255,255,255,.66);font-size:18px;line-height:1.65;margin:0}',
-      '.albumDeck{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;max-width:1420px;margin:0 auto 18px}.albumCard{position:relative;min-height:390px;border:1px solid rgba(255,255,255,.12);border-radius:34px;overflow:hidden;background:#14110e;color:#fff;cursor:pointer;text-align:left;padding:0;box-shadow:0 28px 80px rgba(0,0,0,.28);isolation:isolate}.albumCard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.95) brightness(.78);transition:transform .8s ease,filter .3s ease}.albumCard:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.86),rgba(0,0,0,.25) 55%,rgba(0,0,0,.06))}.albumCard:hover img,.albumCard.active img{transform:scale(1.06);filter:saturate(1.06) brightness(.92)}.albumCard.active{border-color:rgba(255,231,163,.82)}.albumInfo{position:absolute;z-index:2;inset:auto 0 0 0;padding:24px}.albumInfo small{color:var(--gold2);font-weight:950;letter-spacing:2px;text-transform:uppercase}.albumInfo h3{font-size:clamp(26px,2.8vw,42px);margin:10px 0}.albumInfo p{margin:0;color:rgba(255,255,255,.72);line-height:1.45;font-size:14px}.albumTags{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.albumTags span{font-size:11px;font-weight:950;border-radius:999px;padding:7px 9px;background:rgba(255,255,255,.11)}.albumCount{position:absolute;z-index:3;top:18px;left:18px;border-radius:999px;background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.16);padding:9px 12px;font-size:12px;font-weight:950;backdrop-filter:blur(10px)}',
-      '.albumWall{position:relative;max-width:1420px;margin:0 auto;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.035));border-radius:38px;padding:16px;box-shadow:0 30px 90px rgba(0,0,0,.3)}.wallTop{display:flex;justify-content:space-between;align-items:end;gap:18px;padding:12px 10px 18px}.wallTop h3{font-size:clamp(30px,4vw,58px)}.wallTop p{max-width:620px;color:rgba(255,255,255,.64);line-height:1.55;margin:8px 0 0}.wallTop .hint{color:var(--gold2);font-weight:950;letter-spacing:2px;text-transform:uppercase;font-size:12px;white-space:nowrap}',
-      '.mosaic{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:158px;gap:10px}.mosaicTile{position:relative;border:0;border-radius:24px;overflow:hidden;padding:0;background:#111;cursor:zoom-in;box-shadow:0 16px 44px rgba(0,0,0,.24)}.mosaicTile.big{grid-column:span 2;grid-row:span 2}.mosaicTile.wide{grid-column:span 2}.mosaicTile.tall{grid-row:span 2}.mosaicTile img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.94) brightness(.9);transition:transform .55s ease,filter .3s ease}.mosaicTile:hover img{transform:scale(1.08);filter:saturate(1.06) brightness(1)}.mosaicTile:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.62),transparent 55%);opacity:.9}.tileLabel{position:absolute;z-index:2;left:12px;right:12px;bottom:11px;display:flex;justify-content:space-between;gap:12px;color:#fff;font-weight:950;font-size:12px;text-shadow:0 2px 8px rgba(0,0,0,.7)}.tileLabel span:last-child{color:var(--gold2)}',
-      '.storyModal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);display:grid;place-items:center;padding:24px}.storyModal[hidden]{display:none}.storyModalInner{width:min(1180px,100%);display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:stretch}.storyModalImg{border-radius:28px;overflow:hidden;background:#111;min-height:68vh}.storyModalImg img{width:100%;height:100%;object-fit:contain;display:block}.storyModalInfo{border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(255,255,255,.07);padding:24px;color:#fff}.storyModalInfo small{color:var(--gold2);font-weight:950;letter-spacing:2px;text-transform:uppercase}.storyModalInfo h3{font-size:34px;margin:14px 0}.storyModalInfo p{color:rgba(255,255,255,.68);line-height:1.6}.storyModalActions{display:flex;gap:10px;margin-top:20px}.storyModalActions button,.storyClose{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.1);color:#fff;border-radius:999px;padding:11px 14px;font-weight:950;cursor:pointer}.storyClose{position:fixed;top:18px;right:18px;width:46px;height:46px;padding:0;font-size:24px}',
-      '@media(max-width:1100px){.albumDeck{grid-template-columns:repeat(2,1fr)}.studioHead{grid-template-columns:1fr}.mosaic{grid-template-columns:repeat(3,1fr)}.storyModalInner{grid-template-columns:1fr}.storyModalInfo{display:none}}@media(max-width:640px){.portfolioStudio{padding-inline:18px}.albumDeck{grid-template-columns:1fr}.albumCard{min-height:330px}.wallTop{display:block}.mosaic{grid-template-columns:repeat(2,1fr);grid-auto-rows:132px}.mosaicTile.big,.mosaicTile.wide,.mosaicTile.tall{grid-column:span 1;grid-row:span 1}}'
+      '.portfolioIndex{position:relative;overflow:hidden;background:#080706;color:#fff;padding:clamp(76px,8vw,124px) clamp(18px,6vw,86px)}',
+      '.portfolioIndex:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 0%,rgba(216,162,58,.12),transparent 32%),linear-gradient(180deg,#080706,#0e0c09 52%,#080706);pointer-events:none}',
+      '.portfolioIndexHead{position:relative;max-width:1180px;margin:0 auto 28px;display:grid;grid-template-columns:minmax(300px,1fr) minmax(260px,420px);gap:clamp(22px,5vw,70px);align-items:end}.portfolioIndexHead .eyebrow{color:var(--gold2)}.portfolioIndexHead h2{font-size:clamp(38px,5.4vw,86px);max-width:820px}.portfolioIndexHead p:last-child{margin:0;color:rgba(255,255,255,.66);font-size:18px;line-height:1.65}',
+      '.portfolioFilters{position:relative;max-width:1180px;margin:0 auto 18px;display:flex;gap:10px;flex-wrap:wrap}.portfolioFilter{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.06);color:#fff;border-radius:999px;padding:12px 16px;font-weight:950;cursor:pointer;display:flex;gap:10px;align-items:center}.portfolioFilter span{color:rgba(255,255,255,.52);font-size:12px;letter-spacing:1px;text-transform:uppercase}.portfolioFilter.active{background:linear-gradient(135deg,var(--gold),#fff1b9);color:#1d1202;border-color:rgba(255,231,163,.65)}.portfolioFilter.active span{color:rgba(29,18,2,.62)}',
+      '.portfolioFeature{position:relative;max-width:1180px;margin:0 auto 14px;border-radius:38px;overflow:hidden;min-height:440px;background:#111;box-shadow:0 30px 90px rgba(0,0,0,.36);border:1px solid rgba(255,255,255,.12)}.portfolioFeature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.02) brightness(.82);transform:scale(1.01);transition:transform .8s ease}.portfolioFeature:hover img{transform:scale(1.04)}.portfolioFeature:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.58) 36%,rgba(0,0,0,.14) 70%,transparent),linear-gradient(0deg,rgba(0,0,0,.66),transparent 55%)}.featureCopy{position:relative;z-index:2;min-height:440px;display:flex;flex-direction:column;justify-content:flex-end;max-width:650px;padding:clamp(26px,4vw,48px)}.featureCopy small{color:var(--gold2);font-weight:950;letter-spacing:2px;text-transform:uppercase}.featureCopy h3{font-size:clamp(40px,6vw,88px);margin:10px 0}.featureCopy p{color:rgba(255,255,255,.74);font-size:18px;line-height:1.6}.featureTags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.featureTags span{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.09);border-radius:999px;padding:9px 12px;font-weight:900;font-size:12px}',
+      '.portfolioMasonry{position:relative;max-width:1180px;margin:0 auto;columns:4 220px;column-gap:12px}.portfolioShot{position:relative;display:block;width:100%;break-inside:avoid;margin:0 0 12px;border:0;padding:0;border-radius:24px;overflow:hidden;background:#111;cursor:zoom-in;box-shadow:0 18px 48px rgba(0,0,0,.25)}.portfolioShot img{width:100%;display:block;min-height:220px;object-fit:cover;filter:saturate(.96) brightness(.88);transition:transform .55s ease,filter .25s ease}.portfolioShot:nth-child(3n+1) img{height:370px}.portfolioShot:nth-child(3n+2) img{height:270px}.portfolioShot:nth-child(3n) img{height:315px}.portfolioShot:hover img{transform:scale(1.07);filter:saturate(1.06) brightness(1)}.portfolioShot:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.72),transparent 52%)}.portfolioShot span{position:absolute;z-index:2;left:13px;right:13px;bottom:12px;display:flex;justify-content:space-between;color:#fff;font-weight:950;font-size:12px;text-shadow:0 2px 9px rgba(0,0,0,.7)}.portfolioShot span b{color:var(--gold2)}',
+      '.portfolioViewer{position:fixed;inset:0;z-index:220;background:rgba(0,0,0,.92);display:grid;place-items:center;padding:22px}.portfolioViewer[hidden]{display:none}.viewerInner{width:min(1180px,100%);height:min(82vh,820px);display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}.viewerImage{border-radius:28px;overflow:hidden;background:#111;display:grid;place-items:center}.viewerImage img{width:100%;height:100%;object-fit:contain}.viewerInfo{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);border-radius:28px;padding:24px}.viewerInfo small{color:var(--gold2);font-weight:950;letter-spacing:2px;text-transform:uppercase}.viewerInfo h3{font-size:34px;margin:14px 0}.viewerInfo p{color:rgba(255,255,255,.68);line-height:1.6}.viewerActions{display:flex;gap:10px;margin-top:22px}.viewerActions button,.viewerClose{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.1);color:#fff;border-radius:999px;padding:11px 14px;font-weight:950;cursor:pointer}.viewerClose{position:fixed;top:18px;right:18px;width:46px;height:46px;padding:0;font-size:24px}',
+      '@media(max-width:900px){.portfolioIndexHead{grid-template-columns:1fr}.viewerInner{grid-template-columns:1fr}.viewerInfo{display:none}.portfolioFeature,.featureCopy{min-height:400px}}@media(max-width:640px){.portfolioIndex{padding-inline:18px}.portfolioFeature,.featureCopy{min-height:360px}.portfolioMasonry{columns:2 150px}.portfolioShot:nth-child(n) img{height:230px}}'
     ].join('\n');
     document.head.appendChild(css);
 
-    var deck = section.querySelector('.albumDeck');
-    var wall = section.querySelector('.albumWall');
-    var modal = document.createElement('div');
-    modal.className = 'storyModal';
-    modal.hidden = true;
-    document.body.appendChild(modal);
+    var filters = section.querySelector('.portfolioFilters');
+    var feature = section.querySelector('.portfolioFeature');
+    var masonry = section.querySelector('.portfolioMasonry');
+    var viewer = document.createElement('div');
+    viewer.className = 'portfolioViewer';
+    viewer.hidden = true;
+    document.body.appendChild(viewer);
 
-    function tileClass(i) { return i === 0 ? 'big' : (i % 7 === 0 ? 'wide' : (i % 5 === 0 ? 'tall' : '')); }
     function render() {
-      deck.innerHTML = albums.map(function (a, i) {
-        return '<button class="albumCard ' + (i === active ? 'active' : '') + '" data-album="' + i + '"><img src="' + img(a.cover, 0, 1100, 1400) + '" alt="' + a.title + '"><span class="albumCount">' + a.count + ' fotos aprox.</span><div class="albumInfo"><small>' + a.tag + '</small><h3>' + a.title + '</h3><p>' + a.intro + '</p><div class="albumTags">' + a.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div></div></button>';
-      }).join('');
-      var a = albums[active];
-      wall.innerHTML = '<div class="wallTop"><div><span class="hint">Colección activa</span><h3>' + a.title + '</h3><p>' + a.intro + '</p></div><span class="hint">Haz clic para ampliar</span></div><div class="mosaic">' + a.photos.map(function (p, i) {
-        return '<button class="mosaicTile ' + tileClass(i) + '" data-photo="' + i + '"><img src="' + img(p, i, 900, 1200) + '" alt="' + a.title + ' ' + (i + 1) + '"><span class="tileLabel"><span>' + String(i + 1).padStart(2, '0') + '</span><span>' + a.title + '</span></span></button>';
-      }).join('') + '</div>';
+      var g = galleries[active];
+      filters.innerHTML = galleries.map(function (item, i) { return '<button class="portfolioFilter ' + (i === active ? 'active' : '') + '" data-gallery="' + i + '">' + item.title + '<span>' + item.count + ' fotos</span></button>'; }).join('');
+      feature.innerHTML = '<img src="' + photo(g, 0, 1400, 1700) + '" alt="' + g.title + '"><div class="featureCopy"><small>' + g.tag + '</small><h3>' + g.title + '</h3><p>' + g.desc + '</p><div class="featureTags">' + g.labels.map(function (label) { return '<span>' + label + '</span>'; }).join('') + '</div></div>';
+      masonry.innerHTML = g.locks.map(function (_, i) { return '<button class="portfolioShot" data-shot="' + i + '"><img src="' + photo(g, i, 900, 1200) + '" alt="' + g.title + ' ' + (i + 1) + '"><span><b>' + String(i + 1).padStart(2, '0') + '</b>' + g.title + '</span></button>'; }).join('');
     }
-    function openModal(index) {
+    function openViewer(index) {
       modalIndex = index;
-      var a = albums[active];
-      var photo = a.photos[modalIndex];
-      modal.innerHTML = '<button class="storyClose" type="button">×</button><div class="storyModalInner"><div class="storyModalImg"><img src="' + img(photo, modalIndex, 1500, 1900) + '" alt="' + a.title + '"></div><div class="storyModalInfo"><small>' + a.tag + '</small><h3>' + a.title + '</h3><p>Vista ampliada de la colección. La idea es que el cliente pueda recorrer la experiencia como una entrega real, no solo ver una tarjeta suelta.</p><div class="storyModalActions"><button data-prev>Anterior</button><button data-next>Siguiente</button></div></div></div>';
-      modal.hidden = false;
+      var g = galleries[active];
+      viewer.innerHTML = '<button class="viewerClose" type="button">×</button><div class="viewerInner"><div class="viewerImage"><img src="' + photo(g, modalIndex, 1500, 1900) + '" alt="' + g.title + '"></div><div class="viewerInfo"><small>' + g.tag + '</small><h3>' + g.title + '</h3><p>Colección visual con enfoque editorial, color cuidado y lectura profesional para entrega digital.</p><div class="viewerActions"><button data-prev>Anterior</button><button data-next>Siguiente</button></div></div></div>';
+      viewer.hidden = false;
     }
     section.addEventListener('click', function (event) {
-      var album = event.target.closest('[data-album]');
-      var photo = event.target.closest('[data-photo]');
-      if (album) { active = Number(album.getAttribute('data-album')); render(); wall.scrollIntoView({ behavior:'smooth', block:'center' }); }
-      if (photo) openModal(Number(photo.getAttribute('data-photo')));
+      var filter = event.target.closest('[data-gallery]');
+      var shot = event.target.closest('[data-shot]');
+      if (filter) { active = Number(filter.getAttribute('data-gallery')); render(); }
+      if (shot) { openViewer(Number(shot.getAttribute('data-shot'))); }
     });
-    modal.addEventListener('click', function (event) {
-      var a = albums[active];
-      if (event.target.classList.contains('storyClose') || event.target === modal) modal.hidden = true;
-      if (event.target.closest('[data-next]')) openModal((modalIndex + 1) % a.photos.length);
-      if (event.target.closest('[data-prev]')) openModal((modalIndex - 1 + a.photos.length) % a.photos.length);
+    viewer.addEventListener('click', function (event) {
+      var g = galleries[active];
+      if (event.target === viewer || event.target.classList.contains('viewerClose')) viewer.hidden = true;
+      if (event.target.closest('[data-next]')) openViewer((modalIndex + 1) % g.locks.length);
+      if (event.target.closest('[data-prev]')) openViewer((modalIndex - 1 + g.locks.length) % g.locks.length);
     });
     render();
   }
 
   addHeroLayoutFix();
-  addPortfolioExplorer();
+  addPortfolioGallery();
 
   function init() {
     var track = document.querySelector('.mockRibbonTrack');
@@ -114,6 +113,6 @@
     apply(); window.requestAnimationFrame(tick);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { addPortfolioExplorer(); init(); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { addPortfolioGallery(); init(); });
   else init();
 })();
