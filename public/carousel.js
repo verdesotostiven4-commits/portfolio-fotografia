@@ -1,4 +1,21 @@
 (function () {
+  function addHeroLayoutFix() {
+    if (document.getElementById('hero-layout-fix')) return;
+    var style = document.createElement('style');
+    style.id = 'hero-layout-fix';
+    style.textContent = [
+      'html body main .homeHeroContent{transform:translateY(-22px)!important;padding-top:86px!important;padding-bottom:24px!important}',
+      'html body main .homeHeroContent h1{font-size:clamp(44px,5.1vw,72px)!important;line-height:.93!important}',
+      'html body main .homeHeroContent p:not(.eyebrow){font-size:16px!important;line-height:1.42!important;max-width:530px!important;margin-top:16px!important;margin-bottom:0!important}',
+      'html body main .homeHeroContent .heroActions{margin-top:14px!important;gap:12px!important}',
+      'html body main .homeHeroContent .button{min-height:45px!important;padding:11px 19px!important}',
+      '@media(max-width:640px){html body main .homeHeroContent{transform:none!important;padding:118px 18px 60px!important}html body main .homeHeroContent h1{font-size:52px!important}}'
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  addHeroLayoutFix();
+
   function init() {
     var track = document.querySelector('.mockRibbonTrack');
     if (!track) {
