@@ -1,12 +1,10 @@
 (function () {
   function init() {
     var track = document.querySelector('.mockRibbonTrack');
-
     if (!track) {
       window.setTimeout(init, 250);
       return;
     }
-
     if (track.getAttribute('data-drag-ready') === 'true') return;
     track.setAttribute('data-drag-ready', 'true');
 
@@ -38,30 +36,15 @@
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
 
-    track.addEventListener('wheel', function (event) {
-      var amount = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-      if (!amount) return;
-      event.preventDefault();
-      track.scrollLeft += amount;
-    }, { passive: false });
-
     window.setInterval(function () {
       if (down || document.hidden) return;
-
       var max = track.scrollWidth - track.clientWidth;
       if (max <= 0) return;
-
-      if (track.scrollLeft >= max - 2) {
-        track.scrollLeft = 0;
-      } else {
-        track.scrollLeft += speed;
-      }
+      if (track.scrollLeft >= max - 2) track.scrollLeft = 0;
+      else track.scrollLeft += speed;
     }, 20);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
