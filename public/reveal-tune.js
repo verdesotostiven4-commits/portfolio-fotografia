@@ -5,8 +5,8 @@
     s.id='reveal-tune-style';
     s.textContent=[
       '.fineArtStage{overflow:visible!important}',
-      '.fineArtStage.tunedWait img{opacity:var(--fine-opacity,.86)!important;translate:0 var(--fine-y,-360px)!important;transition:filter .35s ease!important;will-change:translate,opacity!important}',
-      '.fineArtStage.tunedWait.tunedReveal img{opacity:1!important;translate:0 0!important}',
+      '.fineArtStage.tunedWait img{opacity:var(--fine-opacity,.92)!important;translate:0 var(--fine-y,-260px)!important;-webkit-clip-path:inset(var(--fine-clip,62%) 0 0 0)!important;clip-path:inset(var(--fine-clip,62%) 0 0 0)!important;transition:filter .35s ease!important;will-change:translate,opacity,clip-path!important}',
+      '.fineArtStage.tunedWait.tunedReveal img{opacity:1!important;translate:0 0!important;-webkit-clip-path:inset(0 0 0 0)!important;clip-path:inset(0 0 0 0)!important}',
       '.aboutPhoto.tunedWait{opacity:0!important;translate:-105px 0!important;transition:opacity .95s ease,translate 1.15s cubic-bezier(.16,1,.3,1)!important}',
       '.aboutPhoto.tunedWait.tunedReveal{opacity:1!important;translate:0 0!important}'
     ].join('\n');
@@ -18,27 +18,21 @@
     if(!stage)return false;
     stage.classList.remove('is-revealed','tunedReveal');
     stage.classList.add('tunedWait');
-    var done=false;
     function update(){
-      if(done)return;
       var rect=stage.getBoundingClientRect();
       var vh=window.innerHeight||document.documentElement.clientHeight;
-      var start=vh*1.22;
-      var end=vh*0.32;
+      var start=vh*1.04;
+      var end=vh*0.30;
       var p=clamp((start-rect.top)/(start-end),0,1);
       var eased=p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;
-      var y=-360+(360*eased);
-      var opacity=.82+(.18*eased);
+      var y=-260+(260*eased);
+      var clip=62-(62*eased);
+      var opacity=.9+(.1*eased);
       stage.style.setProperty('--fine-y',y.toFixed(1)+'px');
+      stage.style.setProperty('--fine-clip',clip.toFixed(1)+'%');
       stage.style.setProperty('--fine-opacity',opacity.toFixed(3));
-      if(p>=.998){
-        done=true;
-        stage.classList.add('tunedReveal');
-        stage.style.removeProperty('--fine-y');
-        stage.style.removeProperty('--fine-opacity');
-        window.removeEventListener('scroll',onScroll);
-        window.removeEventListener('resize',onScroll);
-      }
+      if(p>.985)stage.classList.add('tunedReveal');
+      else stage.classList.remove('tunedReveal');
     }
     var ticking=false;
     function onScroll(){
