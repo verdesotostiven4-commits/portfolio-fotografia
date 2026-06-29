@@ -1,0 +1,17 @@
+html body main .about {
+  background: #050403 !important;
+}
+
+html body main .about::after {
+  height: 34px !important;
+  background: linear-gradient(180deg, rgba(5,4,3,0) 0%, rgba(5,4,3,.18) 55%, rgba(5,4,3,.48) 100%) !important;
+}
+
+html body main .finalPublicCta {
+  background: radial-gradient(circle at 50% 0%, rgba(216,162,58,.2), transparent 32%), #090807 !important;
+}
+
+html body main .finalPublicCta::before {
+  height: 46px !important;
+  background: linear-gradient(180deg, #050403 0%, rgba(6,5,4,.68) 44%, rgba(9,8,7,0) 100%) !important;
+}
