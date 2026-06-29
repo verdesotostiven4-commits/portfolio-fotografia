@@ -13,20 +13,13 @@
     var down = false;
     var startX = 0;
     var startScroll = 0;
-    var touchedAt = 0;
     var speed = 0.9;
-    var resumeDelay = 180;
-
-    function touch(delay) {
-      touchedAt = Date.now() - resumeDelay + (delay || 0);
-    }
 
     function onDown(event) {
       down = true;
       startX = event.clientX;
       startScroll = track.scrollLeft;
       track.classList.add('dragging');
-      touch(resumeDelay);
     }
 
     function onMove(event) {
@@ -39,28 +32,21 @@
       if (!down) return;
       down = false;
       track.classList.remove('dragging');
-      touch(0);
     }
 
     track.addEventListener('mousedown', onDown);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
 
-    track.addEventListener('touchstart', function () { touch(resumeDelay); }, { passive: true });
-    track.addEventListener('touchmove', function () { touch(360); }, { passive: true });
-    track.addEventListener('touchend', function () { touch(0); }, { passive: true });
-
     track.addEventListener('wheel', function (event) {
       var amount = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!amount) return;
       event.preventDefault();
       track.scrollLeft += amount;
-      touch(260);
     }, { passive: false });
 
     window.setInterval(function () {
       if (down || document.hidden) return;
-      if (Date.now() - touchedAt < resumeDelay) return;
 
       var max = track.scrollWidth - track.clientWidth;
       if (max <= 0) return;
