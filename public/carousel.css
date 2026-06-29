@@ -25,6 +25,10 @@ html body main .mockRibbonTrack {
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+  contain: layout paint;
 }
 
 html body main .mockRibbonTrack::-webkit-scrollbar {
@@ -45,6 +49,8 @@ html body main .mockRibbon figure {
   background: #111 !important;
   box-shadow: 0 20px 55px rgba(0,0,0,.18) !important;
   flex: 0 0 auto !important;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 html body main .mockRibbon img {
@@ -53,6 +59,8 @@ html body main .mockRibbon img {
   object-fit: cover !important;
   pointer-events: none !important;
   user-select: none !important;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 html body main .mockRibbon figcaption {
