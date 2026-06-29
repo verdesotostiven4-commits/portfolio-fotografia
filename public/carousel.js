@@ -8,43 +8,69 @@
     if (track.getAttribute('data-drag-ready') === 'true') return;
     track.setAttribute('data-drag-ready', 'true');
 
+    var duration = 46;
     var down = false;
     var startX = 0;
-    var startScroll = 0;
-    var autoSpeed = 46;
-    var lastTime = performance.now();
+    var startProgress = 0;
+    var progress = 0;
     var wheelVelocity = 0;
-    var wheelUntil = 0;
 
-    function maxScroll() {
-      return Math.max(0, track.scrollWidth - track.clientWidth);
+    function loopWidth() {
+      return Math.max(1, track.scrollWidth / 2);
     }
 
-    function limit(value) {
-      var max = maxScroll();
-      if (value < 0) return 0;
-      if (value > max) return max;
-      return value;
+    function wrap(value) {
+      value = value % 1;
+      return value < 0 ? value + 1 : value;
+    }
+
+    function getX() {
+      var transform = window.getComputedStyle(track).transform;
+      if (!transform || transform === 'none') return 0;
+      try {
+        return new DOMMatrixReadOnly(transform).m41 || 0;
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function readProgress() {
+      return wrap(-getX() / loopWidth());
+    }
+
+    function setManual(value) {
+      progress = wrap(value);
+      track.classList.add('manualRibbon');
+      track.style.transform = 'translate3d(' + (-progress * loopWidth()) + 'px,0,0)';
+    }
+
+    function resume() {
+      progress = wrap(progress);
+      track.style.transform = '';
+      track.style.animationDelay = (-progress * duration) + 's';
+      track.classList.remove('manualRibbon');
+      track.classList.remove('dragging');
     }
 
     function onDown(event) {
       down = true;
       wheelVelocity = 0;
       startX = event.clientX;
-      startScroll = track.scrollLeft;
+      startProgress = readProgress();
+      setManual(startProgress);
       track.classList.add('dragging');
     }
 
     function onMove(event) {
       if (!down) return;
       event.preventDefault();
-      track.scrollLeft = limit(startScroll - (event.clientX - startX));
+      setManual(startProgress - (event.clientX - startX) / loopWidth());
     }
 
     function onUp() {
       if (!down) return;
       down = false;
-      track.classList.remove('dragging');
+      resume();
     }
 
     track.addEventListener('mousedown', onDown);
@@ -54,26 +80,19 @@
     track.addEventListener('wheel', function (event) {
       if (Math.abs(event.deltaX) <= Math.abs(event.deltaY) || event.deltaX === 0) return;
       event.preventDefault();
-      wheelVelocity += event.deltaX * 0.22;
-      if (wheelVelocity > 34) wheelVelocity = 34;
-      if (wheelVelocity < -34) wheelVelocity = -34;
-      wheelUntil = performance.now() + 180;
+      if (!track.classList.contains('manualRibbon')) setManual(readProgress());
+      wheelVelocity += event.deltaX / loopWidth();
+      if (wheelVelocity > 0.035) wheelVelocity = 0.035;
+      if (wheelVelocity < -0.035) wheelVelocity = -0.035;
     }, { passive: false });
 
-    function tick(now) {
-      var dt = Math.min(48, now - lastTime) / 1000;
-      lastTime = now;
-      var max = maxScroll();
-
-      if (!down && !document.hidden && max > 0) {
-        if (Math.abs(wheelVelocity) > 0.05 || now < wheelUntil) {
-          track.scrollLeft = limit(track.scrollLeft + wheelVelocity);
-          wheelVelocity *= 0.86;
-        } else if (track.scrollLeft >= max - 2) {
-          track.scrollLeft = 0;
-        } else {
-          track.scrollLeft += autoSpeed * dt;
-        }
+    function tick() {
+      if (!down && Math.abs(wheelVelocity) > 0.00004) {
+        setManual(progress + wheelVelocity);
+        wheelVelocity *= 0.86;
+      } else if (!down && track.classList.contains('manualRibbon')) {
+        wheelVelocity = 0;
+        resume();
       }
 
       window.requestAnimationFrame(tick);
