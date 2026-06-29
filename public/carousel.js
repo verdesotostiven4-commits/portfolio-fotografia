@@ -11,16 +11,16 @@
     var down = false;
     var startX = 0;
     var startScroll = 0;
-    var speed = 46;
+    var autoSpeed = 46;
     var lastTime = performance.now();
-    var wheelTarget = track.scrollLeft;
-    var wheelActiveUntil = 0;
+    var wheelVelocity = 0;
+    var wheelUntil = 0;
 
     function maxScroll() {
       return Math.max(0, track.scrollWidth - track.clientWidth);
     }
 
-    function clamp(value) {
+    function limit(value) {
       var max = maxScroll();
       if (value < 0) return 0;
       if (value > max) return max;
@@ -29,24 +29,22 @@
 
     function onDown(event) {
       down = true;
+      wheelVelocity = 0;
       startX = event.clientX;
       startScroll = track.scrollLeft;
-      wheelActiveUntil = 0;
       track.classList.add('dragging');
     }
 
     function onMove(event) {
       if (!down) return;
       event.preventDefault();
-      track.scrollLeft = clamp(startScroll - (event.clientX - startX));
-      wheelTarget = track.scrollLeft;
+      track.scrollLeft = limit(startScroll - (event.clientX - startX));
     }
 
     function onUp() {
       if (!down) return;
       down = false;
       track.classList.remove('dragging');
-      wheelTarget = track.scrollLeft;
     }
 
     track.addEventListener('mousedown', onDown);
@@ -54,11 +52,12 @@
     window.addEventListener('mouseup', onUp);
 
     track.addEventListener('wheel', function (event) {
-      var horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY);
-      if (!horizontal) return;
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY) || event.deltaX === 0) return;
       event.preventDefault();
-      wheelTarget = clamp(wheelTarget + event.deltaX);
-      wheelActiveUntil = performance.now() + 90;
+      wheelVelocity += event.deltaX * 0.22;
+      if (wheelVelocity > 34) wheelVelocity = 34;
+      if (wheelVelocity < -34) wheelVelocity = -34;
+      wheelUntil = performance.now() + 180;
     }, { passive: false });
 
     function tick(now) {
@@ -67,14 +66,13 @@
       var max = maxScroll();
 
       if (!down && !document.hidden && max > 0) {
-        if (now < wheelActiveUntil || Math.abs(wheelTarget - track.scrollLeft) > 0.5) {
-          track.scrollLeft += (wheelTarget - track.scrollLeft) * 0.28;
+        if (Math.abs(wheelVelocity) > 0.05 || now < wheelUntil) {
+          track.scrollLeft = limit(track.scrollLeft + wheelVelocity);
+          wheelVelocity *= 0.86;
         } else if (track.scrollLeft >= max - 2) {
           track.scrollLeft = 0;
-          wheelTarget = 0;
         } else {
-          track.scrollLeft += speed * dt;
-          wheelTarget = track.scrollLeft;
+          track.scrollLeft += autoSpeed * dt;
         }
       }
 
