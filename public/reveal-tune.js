@@ -4,34 +4,37 @@
     var s=document.createElement('style');
     s.id='reveal-tune-style';
     s.textContent=[
-      '.fineArtStage{overflow:hidden!important}',
-      '.fineArtStage.tunedWait img{opacity:1!important;translate:0 var(--fine-y,86px)!important;-webkit-clip-path:inset(var(--fine-cut,78%) 0 0 0)!important;clip-path:inset(var(--fine-cut,78%) 0 0 0)!important;-webkit-mask-image:none!important;mask-image:none!important;transition:filter .35s ease!important;will-change:translate,clip-path!important}',
-      '.fineArtStage.tunedWait.tunedReveal img{opacity:1!important;translate:0 0!important;-webkit-clip-path:inset(0 0 0 0)!important;clip-path:inset(0 0 0 0)!important;-webkit-mask-image:none!important;mask-image:none!important}',
+      '.fineArtStage{overflow:visible!important}',
+      '.fineArtStage.tunedWait img{opacity:1!important;translate:0 var(--fine-y,170px)!important;-webkit-clip-path:none!important;clip-path:none!important;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent calc(100% - var(--fine-reveal,18%)),rgba(0,0,0,.12) calc(100% - var(--fine-reveal,18%) + 3%),rgba(0,0,0,.72) calc(100% - var(--fine-reveal,18%) + 7%),black calc(100% - var(--fine-reveal,18%) + 12%),black 100%)!important;mask-image:linear-gradient(to bottom,transparent 0%,transparent calc(100% - var(--fine-reveal,18%)),rgba(0,0,0,.12) calc(100% - var(--fine-reveal,18%) + 3%),rgba(0,0,0,.72) calc(100% - var(--fine-reveal,18%) + 7%),black calc(100% - var(--fine-reveal,18%) + 12%),black 100%)!important;transition:filter .35s ease!important;will-change:translate,mask-image!important}',
+      '.fineArtStage.tunedWait.tunedFinal img{translate:0 0!important;-webkit-mask-image:linear-gradient(to bottom,black 0%,black 100%)!important;mask-image:linear-gradient(to bottom,black 0%,black 100%)!important}',
       '.aboutPhoto.tunedWait{opacity:0!important;translate:-105px 0!important;transition:opacity .95s ease,translate 1.15s cubic-bezier(.16,1,.3,1)!important}',
       '.aboutPhoto.tunedWait.tunedReveal{opacity:1!important;translate:0 0!important}'
     ].join('\n');
     document.head.appendChild(s);
   }
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
-  function easeInOut(t){return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;}
+  function smooth(t){return t*t*(3-2*t);}
   function setupFineArt(){
     var stage=document.querySelector('.fineArtStage');
     if(!stage)return false;
-    stage.classList.remove('is-revealed','tunedReveal');
+    stage.classList.remove('is-revealed','tunedReveal','tunedFinal');
     stage.classList.add('tunedWait');
     function update(){
       var rect=stage.getBoundingClientRect();
       var vh=window.innerHeight||document.documentElement.clientHeight;
-      var start=vh*1.06;
-      var end=vh*0.30;
-      var p=clamp((start-rect.top)/(start-end),0,1);
-      var e=easeInOut(p);
-      var cut=78-(78*e);
-      var y=86-(86*e);
-      stage.style.setProperty('--fine-cut',cut.toFixed(2)+'%');
+      var start=vh*0.96;
+      var end=vh*0.14;
+      var raw=clamp((start-rect.top)/(start-end),0,1);
+      var p=smooth(raw);
+      var reveal=16+(84*p);
+      var y=180-(180*p);
+      stage.style.setProperty('--fine-reveal',reveal.toFixed(2)+'%');
       stage.style.setProperty('--fine-y',y.toFixed(1)+'px');
-      if(p>.992)stage.classList.add('tunedReveal');
-      else stage.classList.remove('tunedReveal');
+      if(raw>.992){
+        stage.classList.add('tunedFinal');
+      }else{
+        stage.classList.remove('tunedFinal');
+      }
     }
     var ticking=false;
     function onScroll(){
