@@ -12,18 +12,23 @@ html body main .ribbonBtn {
 }
 
 html body main .mockRibbonTrack {
+  animation: none !important;
   display: flex !important;
   gap: 14px !important;
-  width: max-content !important;
-  animation: ribbonMove 46s linear infinite !important;
+  width: auto !important;
+  max-width: none !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 0 !important;
   cursor: grab;
   user-select: none;
-  touch-action: pan-y;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: auto;
 }
 
-html body main .mockRibbonTrack.dragging,
-html body main .mockRibbonTrack:hover {
-  animation-play-state: paused !important;
+html body main .mockRibbonTrack::-webkit-scrollbar {
+  display: none;
 }
 
 html body main .mockRibbonTrack.dragging {
