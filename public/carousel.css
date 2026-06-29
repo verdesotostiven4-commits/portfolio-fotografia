@@ -12,30 +12,24 @@ html body main .ribbonBtn {
 }
 
 html body main .mockRibbonTrack {
-  animation: none !important;
   display: flex !important;
   gap: 14px !important;
-  width: auto !important;
+  width: max-content !important;
   max-width: none !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
+  overflow: visible !important;
   padding: 0 !important;
   cursor: grab;
   user-select: none;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: auto;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  will-change: scroll-position;
-  contain: layout paint;
+  touch-action: pan-y;
+  animation: ribbonMove 46s linear infinite !important;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-html body main .mockRibbonTrack::-webkit-scrollbar {
-  display: none;
-}
-
+html body main .mockRibbonTrack.manualRibbon,
 html body main .mockRibbonTrack.dragging {
+  animation: none !important;
   cursor: grabbing;
 }
 
