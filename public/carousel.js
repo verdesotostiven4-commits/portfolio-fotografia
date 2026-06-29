@@ -15,9 +15,10 @@
     var startScroll = 0;
     var touchedAt = 0;
     var speed = 0.9;
+    var resumeDelay = 180;
 
-    function touch() {
-      touchedAt = Date.now();
+    function touch(delay) {
+      touchedAt = Date.now() - resumeDelay + (delay || 0);
     }
 
     function onDown(event) {
@@ -25,7 +26,7 @@
       startX = event.clientX;
       startScroll = track.scrollLeft;
       track.classList.add('dragging');
-      touch();
+      touch(resumeDelay);
     }
 
     function onMove(event) {
@@ -38,27 +39,28 @@
       if (!down) return;
       down = false;
       track.classList.remove('dragging');
-      touch();
+      touch(0);
     }
 
     track.addEventListener('mousedown', onDown);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
 
-    track.addEventListener('touchstart', touch, { passive: true });
-    track.addEventListener('touchmove', touch, { passive: true });
+    track.addEventListener('touchstart', function () { touch(resumeDelay); }, { passive: true });
+    track.addEventListener('touchmove', function () { touch(360); }, { passive: true });
+    track.addEventListener('touchend', function () { touch(0); }, { passive: true });
 
     track.addEventListener('wheel', function (event) {
       var amount = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!amount) return;
       event.preventDefault();
       track.scrollLeft += amount;
-      touch();
+      touch(260);
     }, { passive: false });
 
     window.setInterval(function () {
       if (down || document.hidden) return;
-      if (Date.now() - touchedAt < 1300) return;
+      if (Date.now() - touchedAt < resumeDelay) return;
 
       var max = track.scrollWidth - track.clientWidth;
       if (max <= 0) return;
