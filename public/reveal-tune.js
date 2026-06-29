@@ -4,15 +4,16 @@
     var s=document.createElement('style');
     s.id='reveal-tune-style';
     s.textContent=[
-      '.fineArtStage{overflow:visible!important}',
-      '.fineArtStage.tunedWait img{opacity:var(--fine-opacity,.98)!important;translate:0 var(--fine-y,240px)!important;-webkit-clip-path:none!important;clip-path:none!important;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent calc(100% - var(--fine-reveal,28%)),rgba(0,0,0,.18) calc(100% - var(--fine-reveal,28%) + 8%),black calc(100% - var(--fine-reveal,28%) + 32%),black 100%)!important;mask-image:linear-gradient(to bottom,transparent 0%,transparent calc(100% - var(--fine-reveal,28%)),rgba(0,0,0,.18) calc(100% - var(--fine-reveal,28%) + 8%),black calc(100% - var(--fine-reveal,28%) + 32%),black 100%)!important;transition:filter .35s ease!important;will-change:translate,opacity,mask-image!important}',
-      '.fineArtStage.tunedWait.tunedReveal img{opacity:1!important;translate:0 0!important;-webkit-mask-image:linear-gradient(to bottom,black 0%,black 100%)!important;mask-image:linear-gradient(to bottom,black 0%,black 100%)!important}',
+      '.fineArtStage{overflow:hidden!important}',
+      '.fineArtStage.tunedWait img{opacity:1!important;translate:0 var(--fine-y,86px)!important;-webkit-clip-path:inset(var(--fine-cut,78%) 0 0 0)!important;clip-path:inset(var(--fine-cut,78%) 0 0 0)!important;-webkit-mask-image:none!important;mask-image:none!important;transition:filter .35s ease!important;will-change:translate,clip-path!important}',
+      '.fineArtStage.tunedWait.tunedReveal img{opacity:1!important;translate:0 0!important;-webkit-clip-path:inset(0 0 0 0)!important;clip-path:inset(0 0 0 0)!important;-webkit-mask-image:none!important;mask-image:none!important}',
       '.aboutPhoto.tunedWait{opacity:0!important;translate:-105px 0!important;transition:opacity .95s ease,translate 1.15s cubic-bezier(.16,1,.3,1)!important}',
       '.aboutPhoto.tunedWait.tunedReveal{opacity:1!important;translate:0 0!important}'
     ].join('\n');
     document.head.appendChild(s);
   }
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
+  function easeInOut(t){return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;}
   function setupFineArt(){
     var stage=document.querySelector('.fineArtStage');
     if(!stage)return false;
@@ -21,17 +22,15 @@
     function update(){
       var rect=stage.getBoundingClientRect();
       var vh=window.innerHeight||document.documentElement.clientHeight;
-      var start=vh*0.96;
-      var end=vh*0.24;
+      var start=vh*1.06;
+      var end=vh*0.30;
       var p=clamp((start-rect.top)/(start-end),0,1);
-      var eased=p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;
-      var y=240-(240*eased);
-      var reveal=24+(76*eased);
-      var opacity=.96+(.04*eased);
+      var e=easeInOut(p);
+      var cut=78-(78*e);
+      var y=86-(86*e);
+      stage.style.setProperty('--fine-cut',cut.toFixed(2)+'%');
       stage.style.setProperty('--fine-y',y.toFixed(1)+'px');
-      stage.style.setProperty('--fine-reveal',reveal.toFixed(1)+'%');
-      stage.style.setProperty('--fine-opacity',opacity.toFixed(3));
-      if(p>.985)stage.classList.add('tunedReveal');
+      if(p>.992)stage.classList.add('tunedReveal');
       else stage.classList.remove('tunedReveal');
     }
     var ticking=false;
