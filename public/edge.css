@@ -10,3 +10,9 @@ html body main .homeHero .nav { position: relative !important; z-index: 5 !impor
 html body main .homeHero .nav nav { padding: 0 !important; border-radius: 0 !important; background: transparent !important; border: 0 !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
 html body main .homeHero .nav nav a { color: rgba(255,255,255,.97) !important; text-shadow: 0 2px 9px rgba(0,0,0,.42) !important; }
 html body main .homeHero .nav nav a:hover { color: #fff !important; }
+html body main #experiencias .studioHead h2 { font-size: 0 !important; }
+html body main #experiencias .studioHead h2::after { content: "Colecciones visuales para cada tipo de historia."; display: block; font-size: clamp(38px,5vw,78px); line-height: .94; letter-spacing: -.06em; }
+html body main #experiencias .studioHead > p:last-child { font-size: 0 !important; }
+html body main #experiencias .studioHead > p:last-child::after { content: "Bodas, quinceaños, sesiones y naturaleza organizadas como series limpias, elegantes y fáciles de explorar."; display: block; font-size: 18px; line-height: 1.65; color: rgba(255,255,255,.66); }
+html body .storyModalInfo p { font-size: 0 !important; }
+html body .storyModalInfo p::after { content: "Selección ampliada de la colección, pensada para apreciar composición, color, luz y estilo de entrega."; display: block; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.68); }
