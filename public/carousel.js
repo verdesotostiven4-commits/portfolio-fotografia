@@ -1,15 +1,22 @@
 (function () {
   function init() {
     var track = document.querySelector('.mockRibbonTrack');
-    if (!track || track.getAttribute('data-drag-ready') === 'true') return;
+
+    if (!track) {
+      window.setTimeout(init, 250);
+      return;
+    }
+
+    if (track.getAttribute('data-drag-ready') === 'true') return;
     track.setAttribute('data-drag-ready', 'true');
 
     var down = false;
     var startX = 0;
     var startScroll = 0;
     var touchedAt = 0;
+    var speed = 0.9;
 
-    function markTouched() {
+    function touch() {
       touchedAt = Date.now();
     }
 
@@ -18,7 +25,7 @@
       startX = event.clientX;
       startScroll = track.scrollLeft;
       track.classList.add('dragging');
-      markTouched();
+      touch();
     }
 
     function onMove(event) {
@@ -28,36 +35,45 @@
     }
 
     function onUp() {
+      if (!down) return;
       down = false;
       track.classList.remove('dragging');
-      markTouched();
+      touch();
     }
 
     track.addEventListener('mousedown', onDown);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
 
-    track.addEventListener('touchstart', function () {
-      markTouched();
-    }, { passive: true });
+    track.addEventListener('touchstart', touch, { passive: true });
+    track.addEventListener('touchmove', touch, { passive: true });
 
     track.addEventListener('wheel', function (event) {
-      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-        event.preventDefault();
-        track.scrollLeft += event.deltaY;
-        markTouched();
-      }
+      var amount = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      if (!amount) return;
+      event.preventDefault();
+      track.scrollLeft += amount;
+      touch();
     }, { passive: false });
 
     window.setInterval(function () {
-      if (down || document.hidden || Date.now() - touchedAt < 1800) return;
+      if (down || document.hidden) return;
+      if (Date.now() - touchedAt < 1300) return;
+
       var max = track.scrollWidth - track.clientWidth;
       if (max <= 0) return;
-      if (track.scrollLeft >= max - 2) track.scrollLeft = 0;
-      else track.scrollLeft += 1;
-    }, 28);
+
+      if (track.scrollLeft >= max - 2) {
+        track.scrollLeft = 0;
+      } else {
+        track.scrollLeft += speed;
+      }
+    }, 20);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
