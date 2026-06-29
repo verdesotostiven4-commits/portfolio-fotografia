@@ -1,78 +1,8 @@
-html body main .mockRibbon {
-  overflow: hidden !important;
-  background: #fffaf0 !important;
-  padding: 0 0 80px !important;
-}
-
-html body main .ribbonHeader,
-html body main .ribbonActions,
-html body main .ribbonProgress,
-html body main .ribbonBtn {
-  display: none !important;
-}
-
-html body main .mockRibbonTrack {
-  display: flex !important;
-  gap: 14px !important;
-  width: max-content !important;
-  max-width: none !important;
-  overflow: visible !important;
-  padding: 0 !important;
-  cursor: grab;
-  user-select: none;
-  touch-action: pan-y;
-  animation: ribbonMove 46s linear infinite !important;
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-html body main .mockRibbonTrack.manualRibbon,
-html body main .mockRibbonTrack.dragging {
-  animation: none !important;
-  cursor: grabbing;
-}
-
-html body main .mockRibbon figure {
-  position: relative !important;
-  margin: 0 !important;
-  width: 220px !important;
-  height: 310px !important;
-  border-radius: 28px !important;
-  overflow: hidden !important;
-  background: #111 !important;
-  box-shadow: 0 20px 55px rgba(0,0,0,.18) !important;
-  flex: 0 0 auto !important;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-html body main .mockRibbon img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  pointer-events: none !important;
-  user-select: none !important;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-html body main .mockRibbon figcaption {
-  position: absolute !important;
-  left: 12px !important;
-  bottom: 12px !important;
-  color: #fff !important;
-  background: rgba(0,0,0,.46) !important;
-  border-radius: 999px !important;
-  padding: 6px 10px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-  letter-spacing: 1px !important;
-}
-
-@media (max-width: 640px) {
-  html body main .mockRibbon figure {
-    width: 170px !important;
-    height: 240px !important;
-  }
-}
+html body main .mockRibbon{overflow:hidden!important;background:#fffaf0!important;padding:0 0 80px!important}
+html body main .ribbonHeader,html body main .ribbonActions,html body main .ribbonProgress,html body main .ribbonBtn{display:none!important}
+html body main .mockRibbonTrack{display:flex!important;gap:14px!important;width:max-content!important;max-width:none!important;overflow:visible!important;padding:0!important;cursor:grab;user-select:none;animation:none!important;will-change:transform;backface-visibility:hidden}
+html body main .mockRibbonTrack.dragging{cursor:grabbing}
+html body main .mockRibbon figure{position:relative!important;margin:0!important;width:220px!important;height:310px!important;border-radius:28px!important;overflow:hidden!important;background:#111!important;box-shadow:0 20px 55px rgba(0,0,0,.18)!important;flex:0 0 auto!important;transform:translateZ(0);backface-visibility:hidden}
+html body main .mockRibbon img{width:100%!important;height:100%!important;object-fit:cover!important;pointer-events:none!important;user-select:none!important;transform:translateZ(0);backface-visibility:hidden}
+html body main .mockRibbon figcaption{position:absolute!important;left:12px!important;bottom:12px!important;color:#fff!important;background:rgba(0,0,0,.46)!important;border-radius:999px!important;padding:6px 10px!important;font-size:12px!important;font-weight:900!important;letter-spacing:1px!important}
+@media(max-width:640px){html body main .mockRibbon figure{width:170px!important;height:240px!important}}
