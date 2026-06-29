@@ -4,7 +4,8 @@
     var s=document.createElement('style');
     s.id='reveal-tune-style';
     s.textContent=[
-      '.fineArtStage.tunedWait img{opacity:var(--fine-opacity,.18)!important;translate:0 var(--fine-y,-150px)!important;transition:filter .35s ease!important;will-change:translate,opacity!important}',
+      '.fineArtStage{overflow:visible!important}',
+      '.fineArtStage.tunedWait img{opacity:var(--fine-opacity,.86)!important;translate:0 var(--fine-y,-360px)!important;transition:filter .35s ease!important;will-change:translate,opacity!important}',
       '.fineArtStage.tunedWait.tunedReveal img{opacity:1!important;translate:0 0!important}',
       '.aboutPhoto.tunedWait{opacity:0!important;translate:-105px 0!important;transition:opacity .95s ease,translate 1.15s cubic-bezier(.16,1,.3,1)!important}',
       '.aboutPhoto.tunedWait.tunedReveal{opacity:1!important;translate:0 0!important}'
@@ -22,15 +23,15 @@
       if(done)return;
       var rect=stage.getBoundingClientRect();
       var vh=window.innerHeight||document.documentElement.clientHeight;
-      var start=vh*0.98;
-      var end=vh*0.26;
+      var start=vh*1.22;
+      var end=vh*0.32;
       var p=clamp((start-rect.top)/(start-end),0,1);
-      var eased=1-Math.pow(1-p,3);
-      var y=-150+(150*eased);
-      var opacity=.16+(.84*eased);
+      var eased=p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;
+      var y=-360+(360*eased);
+      var opacity=.82+(.18*eased);
       stage.style.setProperty('--fine-y',y.toFixed(1)+'px');
       stage.style.setProperty('--fine-opacity',opacity.toFixed(3));
-      if(p>=.995){
+      if(p>=.998){
         done=true;
         stage.classList.add('tunedReveal');
         stage.style.removeProperty('--fine-y');
