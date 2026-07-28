@@ -1,74 +1,364 @@
-import { useMemo, useState } from "react";
-import { clientGallery, eventPhotos, photographer, services, type GalleryCategory, type GalleryPhoto } from "./data";
-import "./styles.css";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
+import {
+  clientGalleries,
+  photographer,
+  portfolioWorks,
+  seaLionArt,
+  specialties,
+  type ClientGallery,
+  type GalleryCategory,
+  type GalleryPhoto,
+} from "./data";
 
-const categoryLabels: Record<GalleryCategory | "todos", string> = { todos: "Todo", emocion: "Emoción", retrato: "Retratos", vals: "Vals", decoracion: "Decoración", detalle: "Detalles", editorial: "Editorial", momento: "Momentos" };
-const wa = (message: string) => `https://wa.me/${photographer.whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
-const img = (seed: string, w = 1200, h = 1600) => `https://picsum.photos/seed/bystiven-${seed}/${w}/${h}`;
-const seaLionArt = "https://blogger.googleusercontent.com/img/a/AVvXsEijmDWn4oCDM4prrw9f1pezhlyJJVqI4Mpe2xmRwzxMfWypqpEilpAhg54z_ZXUfbZXto-QPVC02H-SUQFT5T0WULTbHma6hODuKZVRJnBG2royWc0m-c1QqXpzSQ3nxQ43-RTYrdnn4Wb3RlROi0QoOKLOXb7c69wPYkvbMhaLEYFQTECs7stnJRBr7WI";
+const categoryLabels: Record<GalleryCategory | "todos", string> = {
+  todos: "Todas",
+  emocion: "Emoción",
+  retrato: "Retratos",
+  vals: "Vals",
+  decoracion: "Decoración",
+  detalle: "Detalles",
+  editorial: "Editorial",
+  momento: "Momentos",
+};
 
-const mockStyles = `.instagramButton{gap:10px;padding-inline:18px}.instagramButton svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8}.nav nav{gap:22px}.sectionHeader{max-width:860px}.sectionHeader p{color:var(--muted);font-size:18px;line-height:1.75}.mockRibbon{overflow:hidden;background:#fffaf0;padding:0 0 80px}.mockRibbonTrack{display:flex;gap:14px;width:max-content;animation:ribbonMove 46s linear infinite}.mockRibbon figure{position:relative;margin:0;width:220px;height:310px;border-radius:28px;overflow:hidden;background:#111;box-shadow:0 20px 55px rgba(0,0,0,.18)}.mockRibbon img{width:100%;height:100%;object-fit:cover}.mockRibbon figcaption{position:absolute;left:12px;bottom:12px;color:#fff;background:rgba(0,0,0,.46);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;letter-spacing:1px}@keyframes ribbonMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}.fineArtFeature{background:#fff;color:#0c0b09;display:grid;grid-template-columns:minmax(320px,1fr) minmax(280px,520px);gap:clamp(30px,6vw,90px);align-items:center;overflow:hidden}.fineArtStage{min-height:560px;display:grid;place-items:center;background:radial-gradient(circle at 50% 66%,rgba(0,0,0,.08),transparent 28%),#fff;border-radius:42px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.08)}.fineArtStage img{width:min(620px,92%);object-fit:contain;animation:artFloat 7s ease-in-out infinite;filter:drop-shadow(0 28px 34px rgba(0,0,0,.13))}.fineArtCopy{position:relative}.fineArtCopy:before{content:'Fine Art';position:absolute;top:-90px;left:-10px;font-size:clamp(70px,10vw,160px);font-weight:950;letter-spacing:-.08em;color:rgba(0,0,0,.045);z-index:0}.fineArtCopy>*{position:relative;z-index:1}.fineArtCopy p{color:var(--muted);font-size:18px;line-height:1.75}.artTags{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.artTags span{border:1px solid rgba(0,0,0,.1);border-radius:999px;padding:10px 14px;font-weight:900;background:#fffaf0}@keyframes artFloat{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(-14px) rotate(-.35deg) scale(1.015)}}.collectionPanels{background:#fffaf0}.collectionGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}.collectionCard{position:relative;min-height:430px;border-radius:34px;overflow:hidden;background:#111;box-shadow:0 28px 80px rgba(0,0,0,.16)}.collectionCard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease}.collectionCard:hover img{transform:scale(1.06)}.collectionCard div{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:24px;color:white;background:linear-gradient(0deg,rgba(0,0,0,.86),rgba(0,0,0,.18),transparent)}.collectionCard span{color:var(--gold2);font-weight:950;letter-spacing:2px}.collectionCard p{color:rgba(255,255,255,.72);line-height:1.6}.portfolioShowcase{background:#090807;color:#fff;padding:clamp(70px,8vw,118px) clamp(18px,6vw,86px)}.showcaseHeader{margin-bottom:34px}.portfolioGrid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:260px;gap:14px}.workCard{position:relative;border-radius:30px;overflow:hidden;background:#111;box-shadow:0 22px 70px rgba(0,0,0,.26)}.workTall{grid-row:span 2}.workWide{grid-column:span 2}.workCard img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease}.workCard:hover img{transform:scale(1.06);filter:saturate(1.08) contrast(1.04)}.workCard div{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:20px;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,.82),rgba(0,0,0,.15),transparent)}.workCard span{color:var(--gold2);font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:950}.testimonials{background:#fffaf0}.testimonialsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}.quoteCard{border-radius:30px;background:#fff;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.08)}.quoteCard p{font-size:20px;color:#2b2219;line-height:1.5}.quoteCard span{font-weight:950;color:var(--gold)}.finalPublicCta{text-align:center;background:radial-gradient(circle at 50% 0%,rgba(216,162,58,.2),transparent 32%),#090807;color:white}.finalPublicCta p{max-width:650px;margin-left:auto;margin-right:auto;color:rgba(255,255,255,.74)}@media(max-width:1000px){.collectionGrid{grid-template-columns:repeat(2,1fr)}.portfolioGrid{grid-template-columns:repeat(2,1fr);grid-auto-rows:240px}.workWide{grid-column:span 1}.testimonialsGrid{grid-template-columns:1fr}.fineArtFeature{grid-template-columns:1fr}.fineArtStage{min-height:420px}}@media(max-width:640px){.collectionGrid,.portfolioGrid{grid-template-columns:1fr}.collectionCard{min-height:360px}.workTall{grid-row:span 1}.mockRibbon figure{width:170px;height:240px}.instagramButton span{display:inline}.fineArtStage{min-height:340px;border-radius:28px}.fineArtFeature{padding-top:54px}}`;
-
-const mockWorks = [
-  { title: "Boda editorial", type: "Wedding Story", image: img("wedding", 1200, 1700), shape: "workTall" },
-  { title: "Retrato creativo", type: "Portrait Session", image: img("portrait", 1200, 1500), shape: "" },
-  { title: "Decoración de evento", type: "Event Details", image: img("decor", 1700, 1100), shape: "workWide" },
-  { title: "Vida salvaje", type: "Wildlife", image: seaLionArt, shape: "" },
-  { title: "Aventura Galápagos", type: "Travel Story", image: img("travel", 1200, 1700), shape: "workTall" },
-  { title: "Graduación", type: "Milestone", image: img("graduation", 1200, 1500), shape: "" },
-  { title: "Ambiente nocturno", type: "Event Mood", image: img("night-event", 1200, 1500), shape: "" },
-  { title: "Producto & marca", type: "Commercial", image: img("brand", 1700, 1100), shape: "workWide" },
-];
-
-const collections = [
-  { label: "01", title: "Quinceaños", text: "Retratos, entrada, vals, familia, detalles y una entrega privada pensada para emocionar.", image: img("quince", 1400, 1200) },
-  { label: "02", title: "Bodas", text: "Cobertura elegante, natural y narrativa desde preparación hasta fiesta.", image: img("bride", 1400, 1200) },
-  { label: "03", title: "Naturaleza", text: "Fauna, paisaje y aventura con mirada documental para Galápagos.", image: seaLionArt },
-  { label: "04", title: "Retrato", text: "Sesiones personales, creativas y urbanas con dirección de pose y luz.", image: img("studio", 1400, 1200) },
-];
-
-function isPrivateGalleryPath() {
-  const path = decodeURIComponent(window.location.pathname).toLowerCase();
-  return path.includes(`/galerias/${clientGallery.slug}`) || path.includes("/alausi15") || path.includes("/alausí15");
+function whatsapp(message: string) {
+  return `https://wa.me/${photographer.whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
 
-export default function App() { return isPrivateGalleryPath() ? <ClientGallery /> : <PortfolioHome />; }
-function MockStyles() { return <style>{mockStyles}</style>; }
-function InstagramIcon() { return <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1.1" /></svg>; }
-function Nav({ dark = false }: { dark?: boolean }) { return <header className={`nav ${dark ? "navDark" : ""}`}><a className="logo" href="/"><span>by</span>Stiven</a><nav><a href="/#trabajo">Trabajo</a><a href="/#galeria">Galería</a><a href="/#servicios">Servicios</a><a href="/#equipo">Equipo</a><a href="/#contacto">Contacto</a></nav></header>; }
+function galleryFromPath(): ClientGallery | undefined {
+  const segments = decodeURIComponent(window.location.pathname)
+    .toLowerCase()
+    .split("/")
+    .filter(Boolean);
+  const slug = segments[segments.length - 1] ?? "";
+  return clientGalleries.find(
+    (gallery) => gallery.slug === slug || gallery.aliases?.includes(slug),
+  );
+}
+
+function isGalleryRoute() {
+  return decodeURIComponent(window.location.pathname).toLowerCase().includes("/galerias/") ||
+    /alausi15|alausí15/i.test(decodeURIComponent(window.location.pathname));
+}
+
+export default function App() {
+  if (isGalleryRoute()) {
+    const gallery = galleryFromPath();
+    return gallery ? <ClientGalleryPage gallery={gallery} /> : <GalleryNotFound />;
+  }
+  return <PortfolioHome />;
+}
+
+function Brand({ dark = false }: { dark?: boolean }) {
+  return (
+    <a className={`brand ${dark ? "brandDark" : ""}`} href="/" aria-label="Inicio byStiven">
+      <span>by</span>Stiven
+    </a>
+  );
+}
+
+function Header() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const close = () => setOpen(false);
+    window.addEventListener("hashchange", close);
+    return () => window.removeEventListener("hashchange", close);
+  }, []);
+
+  return (
+    <header className="siteHeader">
+      <Brand />
+      <button
+        className="menuButton"
+        type="button"
+        aria-expanded={open}
+        aria-label={open ? "Cerrar menú" : "Abrir menú"}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span />
+        <span />
+      </button>
+      <nav className={open ? "siteNav open" : "siteNav"} aria-label="Navegación principal">
+        <a href="#trabajo">Trabajo</a>
+        <a href="#especialidades">Servicios</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#equipo">Sobre mí</a>
+        <a className="navCta" href="#contacto">Reservar</a>
+      </nav>
+    </header>
+  );
+}
 
 function PortfolioHome() {
-  const reel = mockWorks.slice(0, 6);
+  const [activeType, setActiveType] = useState("Todo");
+  const types = ["Todo", ...Array.from(new Set(portfolioWorks.map((work) => work.type)))];
+  const visibleWorks = activeType === "Todo"
+    ? portfolioWorks
+    : portfolioWorks.filter((work) => work.type === activeType);
+
+  useEffect(() => {
+    document.title = "byStiven · Fotografía en Galápagos";
+    document.querySelector('meta[name="robots"]')?.setAttribute("content", "index,follow");
+  }, []);
+
   return (
-    <main><MockStyles />
-      <section className="homeHero"><Nav /><div className="homeHeroBg" style={{ backgroundImage: `url(${photographer.heroBackground})` }} /><div className="heroOverlay" /><div className="heroSubjectWrap"><img className="heroSubject" src={photographer.heroSubject} alt="" /></div><div className="homeHeroContent"><p className="eyebrow">{photographer.location}</p><h1>Fotografía cinematográfica, elegante y real.</h1><p>Soy {photographer.name}. Creo imágenes para eventos, decoración, retratos y naturaleza con una estética premium y una entrega profesional.</p><div className="heroActions"><a className="button primary" href="#trabajo">Explorar portafolio</a><a className="button ghost instagramButton" href={photographer.instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram byStiven"><InstagramIcon /><span>{photographer.handle}</span></a></div></div></section>
-      <section className="section introGrid" id="trabajo"><div><p className="eyebrow">Portafolio</p><h2>Historias visuales con estética editorial y entrega premium.</h2></div><p className="lead">Cada proyecto se construye con dirección, luz, composición y una entrega digital cuidada para que las imágenes no solo se vean bonitas, sino que también se sientan profesionales desde el primer clic.</p></section>
-      <section className="fineArtFeature"><div className="fineArtStage"><img src={seaLionArt} alt="Lobo marino en roca, fotografía fine art" /></div><div className="fineArtCopy"><p className="eyebrow">Galápagos Fine Art</p><h2>Naturaleza con un toque artístico.</h2><p>La vida salvaje también puede sentirse elegante, minimalista y cinematográfica. Esta línea visual combina espacio limpio, movimiento sutil y una composición que convierte una fotografía en pieza protagonista.</p><div className="artTags"><span>Vida salvaje</span><span>Blanco y negro</span><span>Fine art</span><span>Galápagos</span></div></div></section>
-      <section className="mockRibbon"><div className="mockRibbonTrack">{[...reel, ...reel].map((work, index) => <figure key={`${work.title}-${index}`}><img src={work.image} alt={work.title} /><figcaption>{work.type}</figcaption></figure>)}</div></section>
-      <section className="section collectionPanels" id="galeria"><div className="sectionHeader"><p className="eyebrow">Especialidades</p><h2>Eventos, retratos y naturaleza con una misma firma visual.</h2><p>Una selección organizada para que cada visitante entienda rápido qué haces, cómo se ve tu estilo y por qué tu entrega se siente diferente.</p></div><div className="collectionGrid">{collections.map((item) => <article className="collectionCard" key={item.title}><img src={item.image} alt={item.title} /><div><span>{item.label}</span><h3>{item.title}</h3><p>{item.text}</p></div></article>)}</div></section>
-      <section className="portfolioShowcase"><div className="sectionHeader showcaseHeader"><p className="eyebrow">Obras seleccionadas</p><h2>Una galería editorial para mostrar variedad sin perder elegancia.</h2></div><div className="portfolioGrid">{mockWorks.map((work) => <article className={`workCard ${work.shape}`} key={work.title}><img src={work.image} alt={work.title} /><div><span>{work.type}</span><h3>{work.title}</h3></div></article>)}</div></section>
-      <section className="section split" id="servicios"><div><p className="eyebrow">Servicios</p><h2>Fotografía para eventos, marcas, retratos y naturaleza.</h2></div><div className="serviceList">{services.map((s) => <span key={s}>{s}</span>)}</div></section>
-      <section className="section process"><article><span>01</span><h3>Dirección</h3><p>Ordeno la historia para que el cliente vea primero impacto, emoción y calidad.</p></article><article><span>02</span><h3>Edición</h3><p>Color, luz y contraste con estética natural, elegante y comercial.</p></article><article><span>03</span><h3>Entrega</h3><p>Galerías limpias, privadas y listas para revisar, compartir o comprar.</p></article></section>
-      <section className="section testimonials"><div className="sectionHeader"><p className="eyebrow">Experiencia</p><h2>La entrega también tiene que sentirse profesional.</h2></div><div className="testimonialsGrid"><article className="quoteCard"><p>“La galería parece una experiencia, no solo una carpeta de fotos.”</p><span>Cliente de evento</span></article><article className="quoteCard"><p>“Las fotos de decoración ayudan a mostrar la marca con más presencia.”</p><span>Proveedor</span></article><article className="quoteCard"><p>“Todo se ve ordenado, elegante y fácil de compartir.”</p><span>Sesión privada</span></article></div></section>
-      <section className="section about" id="equipo"><div className="aboutPhoto"><img src={photographer.portraitPhoto} alt={`${photographer.name}, fotógrafo`} /></div><div><p className="eyebrow">Detrás de cámara</p><h2>{photographer.name}</h2><p className="lead">{photographer.tagline}</p><div className="gear">{photographer.gear.map((g) => <span key={g}>{g}</span>)}</div><div className="heroActions"><a className="button primary" href={wa("Hola Stiven, vi tu portafolio y quiero información sobre fotografía.")} target="_blank" rel="noreferrer">Cotizar por WhatsApp</a><a className="button ghost instagramButton" href={photographer.instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram byStiven"><InstagramIcon /><span>{photographer.handle}</span></a></div></div></section>
-      <section className="section finalPublicCta" id="contacto"><p className="eyebrow">Reservas</p><h2>¿Listo para convertir tu historia en una galería premium?</h2><p>Eventos, retratos, decoración y naturaleza con una entrega digital que se siente lista para vender.</p><a className="button primary" href={wa("Hola Stiven, vi tu portafolio y quiero reservar una sesión o evento.")} target="_blank" rel="noreferrer">Hablar por WhatsApp</a></section>
+    <main className="portfolioPage">
+      <section className="hero" id="inicio">
+        <div
+          className="heroBackground"
+          style={{ backgroundImage: `url(${photographer.heroBackground})` }}
+          aria-hidden="true"
+        />
+        <div className="heroShade" aria-hidden="true" />
+        <img className="heroSubject" src={photographer.heroSubject} alt="" aria-hidden="true" />
+        <Header />
+        <div className="heroContent">
+          <p className="eyebrow light">{photographer.location}</p>
+          <h1>Fotografía cinematográfica, elegante y real.</h1>
+          <p className="heroLead">
+            Soy {photographer.name}. Creo recuerdos con dirección, emoción y una entrega digital que se siente profesional desde el primer clic.
+          </p>
+          <div className="actions">
+            <a className="button primary" href="#trabajo">Explorar portafolio</a>
+            <a className="button glass" href={photographer.instagramUrl} target="_blank" rel="noreferrer">Instagram · {photographer.handle}</a>
+          </div>
+          <div className="heroFacts" aria-label="Información de disponibilidad">
+            <span><b>Base</b>{photographer.location}</span>
+            <span><b>Sesiones</b>Eventos · Parejas · Maternidad</span>
+            <span><b>Viajes</b>Disponible bajo coordinación</span>
+          </div>
+        </div>
+        <a className="scrollCue" href="#trabajo" aria-label="Bajar al portafolio">Desliza <span>↓</span></a>
+      </section>
+
+      <section className="intro section" id="trabajo">
+        <div>
+          <p className="eyebrow">Portafolio</p>
+          <h2>Historias visuales con estética editorial y emoción verdadera.</h2>
+        </div>
+        <div className="introCopy">
+          <p>
+            No se trata solamente de tomar una foto. Se trata de cuidar la luz, guiar sin forzar, anticipar el momento y entregar una experiencia fácil de disfrutar y compartir.
+          </p>
+          <a className="textLink" href="#galeria">Ver obras seleccionadas <span>↗</span></a>
+        </div>
+      </section>
+
+      <section className="fineArt section">
+        <div className="fineArtVisual">
+          <span className="fineArtWord" aria-hidden="true">Fine Art</span>
+          <img src={seaLionArt} alt="Lobo marino sobre una roca, fotografía fine art" loading="lazy" />
+        </div>
+        <div className="fineArtCopy">
+          <p className="eyebrow">Galápagos Fine Art</p>
+          <h2>Naturaleza con un toque artístico.</h2>
+          <p>
+            La vida salvaje también puede sentirse minimalista y cinematográfica. El espacio limpio y el movimiento sutil convierten la imagen en una pieza protagonista.
+          </p>
+          <div className="chips"><span>Vida salvaje</span><span>Blanco y negro</span><span>Fine art</span><span>Galápagos</span></div>
+        </div>
+      </section>
+
+      <section className="specialties section" id="especialidades">
+        <div className="sectionHeading">
+          <p className="eyebrow">Especialidades</p>
+          <h2>Una misma firma visual para historias diferentes.</h2>
+          <p>Elige el tipo de experiencia que quieres recordar.</p>
+        </div>
+        <div className="specialtyGrid">
+          {specialties.map((item) => (
+            <article className="specialtyCard" key={item.title}>
+              <img src={item.image} alt={item.title} loading="lazy" draggable={false} />
+              <div className="cardShade" />
+              <div className="cardCopy"><span>{item.number}</span><h3>{item.title}</h3><p>{item.text}</p></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="selectedWork section" id="galeria">
+        <div className="sectionHeading inverted">
+          <p className="eyebrow light">Obras seleccionadas</p>
+          <h2>Explora el estilo, la luz y la forma de contar cada historia.</h2>
+        </div>
+        <div className="workFilters" role="group" aria-label="Filtrar portafolio">
+          {types.map((type) => (
+            <button className={activeType === type ? "active" : ""} type="button" key={type} onClick={() => setActiveType(type)}>{type}</button>
+          ))}
+        </div>
+        <div className="workGrid">
+          {visibleWorks.map((work) => (
+            <article className={`workCard ${work.shape}`} key={`${work.title}-${work.type}`}>
+              <img src={work.image} alt={work.title} loading="lazy" draggable={false} />
+              <div><span>{work.type}</span><h3>{work.title}</h3></div>
+            </article>
+          ))}
+        </div>
+        <p className="portfolioNote">Las imágenes publicadas aquí son copias optimizadas para web. Los archivos originales se entregan únicamente a cada cliente.</p>
+      </section>
+
+      <section className="process section" id="proceso">
+        <div className="sectionHeading">
+          <p className="eyebrow">La experiencia</p>
+          <h2>Simple para ti. Cuidada en cada detalle.</h2>
+        </div>
+        <div className="processGrid">
+          <article><span>01</span><h3>Conectamos</h3><p>Conversamos sobre la idea, el lugar, el horario y lo que quieres sentir al ver las fotografías.</p></article>
+          <article><span>02</span><h3>Creamos</h3><p>Te guío con naturalidad, cuido la luz y dejo espacio para que sucedan momentos reales.</p></article>
+          <article><span>03</span><h3>Entrego</h3><p>Recibes una galería privada para revisar y, después de coordinar, tus archivos finales en alta calidad.</p></article>
+        </div>
+      </section>
+
+      <section className="about section" id="equipo">
+        <div className="aboutPhoto"><img src={photographer.portraitPhoto} alt={`${photographer.name}, fotógrafo`} loading="lazy" /></div>
+        <div className="aboutCopy">
+          <p className="eyebrow light">Detrás de cámara</p>
+          <h2>{photographer.name}</h2>
+          <p>{photographer.tagline}</p>
+          <p className="aboutSmall">Mi objetivo es que la experiencia se sienta cercana y que el resultado conserve personalidad, emoción y calidad con el paso del tiempo.</p>
+          <div className="gear">{photographer.gear.map((item) => <span key={item}>{item}</span>)}</div>
+          <div className="actions">
+            <a className="button primary" href={whatsapp("Hola Stiven, vi tu portafolio y quiero conversar sobre una sesión o evento.")} target="_blank" rel="noreferrer">Cotizar por WhatsApp</a>
+            <a className="button glass" href={photographer.instagramUrl} target="_blank" rel="noreferrer">Ver Instagram</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="finalCta section" id="contacto">
+        <p className="eyebrow light">Reservas</p>
+        <h2>Tu historia merece verse tan especial como se sintió.</h2>
+        <p>Cuéntame qué tienes en mente y armamos una experiencia hecha para ti.</p>
+        <a className="button primary" href={whatsapp("Hola Stiven, quiero reservar una sesión de fotos. Esta es mi idea:")} target="_blank" rel="noreferrer">Hablar con Stiven</a>
+      </section>
+
+      <footer><Brand /><p>Fotografía en Galápagos · Ecuador</p><a href={photographer.instagramUrl} target="_blank" rel="noreferrer">{photographer.handle}</a></footer>
     </main>
   );
 }
 
-function ClientGallery() {
+function ClientGalleryPage({ gallery }: { gallery: ClientGallery }) {
   const [category, setCategory] = useState<GalleryCategory | "todos">("todos");
-  const [selected, setSelected] = useState<GalleryPhoto | null>(null);
-  const [pin, setPin] = useState("");
-  const [unlocked, setUnlocked] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
-  const filtered = useMemo(() => category === "todos" ? eventPhotos : eventPhotos.filter((photo) => photo.category === category), [category]);
-  const categories = useMemo(() => ["todos", ...Array.from(new Set(eventPhotos.map((photo) => photo.category)))] as Array<GalleryCategory | "todos">, []);
-  async function copyLink() { await navigator.clipboard.writeText(window.location.href); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
+
+  const categories = useMemo(
+    () => ["todos", ...Array.from(new Set(gallery.photos.map((photo) => photo.category)))] as Array<GalleryCategory | "todos">,
+    [gallery.photos],
+  );
+  const visiblePhotos = category === "todos"
+    ? gallery.photos
+    : gallery.photos.filter((photo) => photo.category === category);
+
+  useEffect(() => {
+    document.title = `${gallery.title} · Galería privada byStiven`;
+    document.querySelector('meta[name="robots"]')?.setAttribute("content", "noindex,nofollow,noarchive");
+    return () => document.querySelector('meta[name="robots"]')?.setAttribute("content", "index,follow");
+  }, [gallery.title]);
+
+  function toggleFavorite(code: string) {
+    setFavorites((current) => current.includes(code)
+      ? current.filter((item) => item !== code)
+      : [...current, code]);
+  }
+
+  async function copyLink() {
+    await navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1600);
+  }
+
+  const favoriteMessage = favorites.length
+    ? `Hola Stiven, revisamos la galería de ${gallery.title}. Nuestras fotos favoritas son: ${favorites.join(", ")}. Queremos coordinar el aporte y la entrega final.`
+    : gallery.contributionMessage;
+
   return (
-    <main className="clientPage"><header className="clientNav"><a className="logo" href="/"><span>by</span>Stiven</a><button onClick={copyLink}>{copied ? "Link copiado" : "Compartir"}</button></header><section className="clientHero"><div className="clientHeroImage" style={{ backgroundImage: `url(${clientGallery.cover})` }} /><div className="clientHeroOverlay" /><div className="clientHeroContent"><p className="eyebrow">Entrega privada · byStiven</p><h1>{clientGallery.title}</h1><p>{clientGallery.subtitle}</p><div className="heroActions"><button className="button primary" onClick={() => document.getElementById("galeria")?.scrollIntoView({ behavior: "smooth" })}>Ver las 24 fotos</button><a className="button ghost light" href="/">Ver portafolio</a></div></div></section><section className="section clientIntro"><div><p className="eyebrow">Vista previa para cliente</p><h2>Una selección privada para revisar, emocionarse y elegir la entrega final.</h2></div><div className="clientPanel"><p>{clientGallery.note}</p><a className="button primary" href={wa(`Hola Stiven, vimos la galería de ${clientGallery.title} y queremos información para adquirir las fotos.`)} target="_blank" rel="noreferrer">Consultar paquete completo</a></div></section><section className="clientStory"><div><span>01</span><h3>Momentos</h3><p>Sonrisas, vals y retratos seleccionados para iniciar con emoción.</p></div><div><span>02</span><h3>Detalles</h3><p>Decoración, pastel, entrada, mesa y ambiente del evento.</p></div><div><span>03</span><h3>Entrega</h3><p>Al confirmar, se prepara la galería final en alta calidad.</p></div></section><section className="downloadBox section"><div><p className="eyebrow">Descarga con PIN</p><h2>Previews protegidas para revisión.</h2><p>Ingresa el PIN para activar botones de descarga en las fotos.</p></div><div className="pinBox"><input value={pin} onChange={(event) => setPin(event.target.value)} placeholder="PIN de 4 números" inputMode="numeric" maxLength={4} /><button className="button primary" onClick={() => setUnlocked(pin.trim() === clientGallery.downloadPin)}>Activar</button>{pin && !unlocked && pin.length >= 4 && <small>PIN incorrecto o pendiente de entrega.</small>}{unlocked && <small className="ok">PIN correcto. Descarga activada.</small>}</div></section><section className="section galleryTools" id="galeria"><div><p className="eyebrow">Galería privada</p><h2>{filtered.length} fotografías seleccionadas</h2></div><div className="filters">{categories.map((cat) => <button className={category === cat ? "active" : ""} onClick={() => setCategory(cat)} key={cat}>{categoryLabels[cat]}</button>)}</div></section><section className="masonry">{filtered.map((photo) => <article className={`photoCard ${photo.orientation}`} key={photo.code}><button onClick={() => setSelected(photo)} aria-label={`Abrir ${photo.title}`}><img src={photo.src} alt={photo.title} /><span className="watermark">byStiven · preview</span><span className="photoInfo"><strong>{photo.code}</strong>{photo.title}</span></button>{unlocked && <a className="downloadPhoto" href={photo.src} download={`${photo.code}-${slugify(photo.title)}.webp`}>Descargar preview</a>}</article>)}</section><section className="section finalCta"><p className="eyebrow">Siguiente paso</p><h2>¿Desean la galería completa en alta calidad?</h2><p>Puedo preparar una entrega final con fotos optimizadas, carpeta de descarga y selección lista para imprimir o compartir.</p><div className="heroActions"><a className="button primary" href={wa(`Hola Stiven, queremos adquirir la galería completa de ${clientGallery.title}.`)} target="_blank" rel="noreferrer">Comprar / coordinar entrega</a><a className="button ghost" href="/">Conocer al fotógrafo</a></div></section>{selected && <Lightbox photo={selected} onClose={() => setSelected(null)} unlocked={unlocked} />}</main>
+    <main className="clientPage" onContextMenu={(event: MouseEvent<HTMLElement>) => event.preventDefault()}>
+      <header className="clientHeader"><Brand /><button type="button" onClick={copyLink}>{copied ? "Enlace copiado" : "Compartir galería"}</button></header>
+      <section className="clientHero">
+        <img src={gallery.cover} alt="" aria-hidden="true" draggable={false} />
+        <div className="clientHeroShade" />
+        <div className="clientHeroContent">
+          <p className="eyebrow light">Entrega privada · byStiven</p>
+          <h1>{gallery.title}</h1>
+          <p>{gallery.subtitle}</p>
+          <div className="actions"><a className="button primary" href="#fotos">Ver fotografías</a><a className="button glass" href="/">Conocer el portafolio</a></div>
+        </div>
+      </section>
+
+      <section className="clientIntro section">
+        <div><p className="eyebrow light">Vista previa para cliente</p><h2>Revisa, disfruta y marca tus favoritas.</h2></div>
+        <div className="previewPanel">
+          <p>{gallery.note}</p>
+          <ul><li>Copias optimizadas para visualización.</li><li>Marca de agua de vista previa.</li><li>Sin descarga de originales antes de coordinar.</li></ul>
+        </div>
+      </section>
+
+      <section className="galleryToolbar section" id="fotos">
+        <div><p className="eyebrow light">Galería privada</p><h2>{visiblePhotos.length} fotografías</h2><p>Toca el corazón para guardar una selección.</p></div>
+        <div className="galleryFilters">{categories.map((item) => <button className={category === item ? "active" : ""} type="button" key={item} onClick={() => setCategory(item)}>{categoryLabels[item]}</button>)}</div>
+      </section>
+
+      <section className="clientMasonry" aria-label="Fotografías de la galería">
+        {visiblePhotos.map((photo) => (
+          <article className={`clientPhoto ${photo.orientation}`} key={photo.code}>
+            <button className="photoOpen" type="button" onClick={() => setSelectedPhoto(photo)} aria-label={`Abrir ${photo.code}`}>
+              <img src={photo.src} alt={photo.title} loading="lazy" draggable={false} />
+              <Watermark />
+              <span className="photoLabel"><b>{photo.code}</b>{photo.title}</span>
+            </button>
+            <button className={favorites.includes(photo.code) ? "favorite active" : "favorite"} type="button" onClick={() => toggleFavorite(photo.code)} aria-label={favorites.includes(photo.code) ? `Quitar ${photo.code} de favoritas` : `Agregar ${photo.code} a favoritas`}>{favorites.includes(photo.code) ? "♥" : "♡"}</button>
+          </article>
+        ))}
+      </section>
+
+      <section className="selectionBar" aria-live="polite">
+        <div><b>{favorites.length}</b><span>{favorites.length === 1 ? "favorita" : "favoritas"}</span></div>
+        <a href={whatsapp(favoriteMessage)} target="_blank" rel="noreferrer">{favorites.length ? "Enviar selección" : "Coordinar entrega"}</a>
+      </section>
+
+      <section className="clientFinal section">
+        <p className="eyebrow light">Entrega final</p>
+        <h2>¿Te gustó el resultado?</h2>
+        <p>Coordina directamente con Stiven el aporte acordado y recibe las fotografías finales sin marca de agua y en alta calidad.</p>
+        <a className="button primary" href={whatsapp(favoriteMessage)} target="_blank" rel="noreferrer">Coordinar aporte y entrega</a>
+      </section>
+
+      {selectedPhoto && <Lightbox photo={selectedPhoto} favorite={favorites.includes(selectedPhoto.code)} onFavorite={() => toggleFavorite(selectedPhoto.code)} onClose={() => setSelectedPhoto(null)} />}
+    </main>
   );
 }
 
-function Lightbox({ photo, onClose, unlocked }: { photo: GalleryPhoto; onClose: () => void; unlocked: boolean }) { return <div className="lightbox" onClick={onClose}><button className="close" aria-label="Cerrar">×</button><div className="lightboxInner" onClick={(event) => event.stopPropagation()}><img src={photo.src} alt={photo.title} /><div className="lightboxCaption"><div><strong>{photo.code}</strong><p>{photo.title}</p></div>{unlocked && <a className="button primary" href={photo.src} download={`${photo.code}-${slugify(photo.title)}.webp`}>Descargar</a>}</div></div></div>; }
-function slugify(text: string) { return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, ""); }
+function Watermark() {
+  return <span className="watermark" aria-hidden="true"><i>byStiven · VISTA PREVIA</i><i>byStiven · VISTA PREVIA</i><i>byStiven · VISTA PREVIA</i></span>;
+}
+
+function Lightbox({ photo, favorite, onFavorite, onClose }: { photo: GalleryPhoto; favorite: boolean; onFavorite: () => void; onClose: () => void }) {
+  useEffect(() => {
+    const handleKey = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [onClose]);
+
+  return (
+    <div className="lightbox" role="dialog" aria-modal="true" aria-label={photo.title} onClick={onClose}>
+      <button className="lightboxClose" type="button" onClick={onClose} aria-label="Cerrar">×</button>
+      <div className="lightboxInner" onClick={(event: MouseEvent<HTMLDivElement>) => event.stopPropagation()}>
+        <div className="lightboxImage"><img src={photo.src} alt={photo.title} draggable={false} /><Watermark /></div>
+        <div className="lightboxCaption"><div><b>{photo.code}</b><p>{photo.title}</p></div><button type="button" className={favorite ? "favoriteAction active" : "favoriteAction"} onClick={onFavorite}>{favorite ? "♥ Guardada" : "♡ Marcar favorita"}</button></div>
+      </div>
+    </div>
+  );
+}
+
+function GalleryNotFound() {
+  useEffect(() => {
+    document.title = "Galería no disponible · byStiven";
+    document.querySelector('meta[name="robots"]')?.setAttribute("content", "noindex,nofollow");
+  }, []);
+
+  return (
+    <main className="notFound"><Brand /><div><p className="eyebrow light">Galería privada</p><h1>Este enlace no está disponible.</h1><p>Puede haber expirado o estar escrito de forma incorrecta. Solicita a Stiven un enlace actualizado.</p><a className="button primary" href={whatsapp("Hola Stiven, el enlace de mi galería no está disponible. ¿Me ayudas con uno actualizado?")} target="_blank" rel="noreferrer">Contactar a Stiven</a></div></main>
+  );
+}

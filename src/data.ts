@@ -13,7 +13,17 @@ export type GalleryPhoto = {
   category: GalleryCategory;
   src: string;
   orientation: "vertical" | "horizontal" | "square";
-  priority: number;
+};
+
+export type ClientGallery = {
+  slug: string;
+  aliases?: string[];
+  title: string;
+  subtitle: string;
+  cover: string;
+  note: string;
+  contributionMessage: string;
+  photos: GalleryPhoto[];
 };
 
 export const photographer = {
@@ -23,23 +33,19 @@ export const photographer = {
   location: "Galápagos · Ecuador",
   instagramUrl: "https://www.instagram.com/bystiven/",
   whatsappNumber: "593968257817",
-  tagline: "Fotografía editorial de eventos, decoración, retrato, naturaleza y vida salvaje.",
-  gear: ["Sony A7C", "100-400mm F4/5.6", "24mm F1.4"],
-  profilePhoto: "https://blogger.googleusercontent.com/img/a/AVvXsEgAnF9SVeIrNupzkphruohtFaPDyF4lb7oKFbUyOkZPSWebRmjVQpZJvw3ZoMFZMbsgaqqt4mup8sABVBhYkigQjwRnzZdXzgSE9TOBQdzVH5W4QL3liFCbRw-_4YtNtjccBlD6FExc9uYlVWFrkaY_8m8XoWchocosdLHnfwxCSdpPrhW8vYeEDraqRQQ",
-  portraitPhoto: "https://blogger.googleusercontent.com/img/a/AVvXsEjfAJe7673Ulq5xldKwjxm7oiLeW-08F72f0UT7zLpn5Ojgqo-iggrvJD2rLavQwlQvUT1XBiqdQ_Ml_ZdoGMD-NuKnFwnQnHQFW7c52PPYq-jdkfVLtjss0SX9kLxB_qaXi8zNXEItusdyo1ni_8tm64AE8MHnJ9nY4jdYK3rQiPC5UW6-KLa2eS1nmE0",
-  heroBackground: "https://blogger.googleusercontent.com/img/a/AVvXsEgJa5DmqcI1heZCqjHzeWoLQ02zEB3nL4RuUbQ7rBNH5byRsNss7Ztrn4ADO3KW7SsyaX2RqFJGnRuCib8S_8rwM2Mn7FlyLH5h9ME_8iIW_PhHNT9k66W73Auwp_kQQ6yW2k_KQsOKa1c2o5UHKeyAx8__7z-d61YEXs4qgflltwJOxyt4l326-3d7S8E",
-  heroSubject: "https://blogger.googleusercontent.com/img/a/AVvXsEigVZBtLcvw0qlA8aOjLAwCQQoXtAt2Q29Mf101IqoPEnTB_1xc00D3VrCHuYiTgE7Ni-hvSzmem3r9xp30BmYNVPSNreprkTDYM1vW5uuAjgL18giyHl45lAhNmporBeDAgu1bZi7LLOODJiMj2w3UeEI6tMURFo6suZdbRZRaLbF-1mddfewo-5E3mUw",
+  tagline:
+    "Fotografía editorial de eventos, parejas, maternidad, retrato, naturaleza y vida salvaje.",
+  gear: ["Sony A7C II", "100-400mm F4.5-5.6", "24-105mm F4", "24mm F1.4"],
+  portraitPhoto:
+    "https://blogger.googleusercontent.com/img/a/AVvXsEjfAJe7673Ulq5xldKwjxm7oiLeW-08F72f0UT7zLpn5Ojgqo-iggrvJD2rLavQwlQvUT1XBiqdQ_Ml_ZdoGMD-NuKnFwnQnHQFW7c52PPYq-jdkfVLtjss0SX9kLxB_qaXi8zNXEItusdyo1ni_8tm64AE8MHnJ9nY4jdYK3rQiPC5UW6-KLa2eS1nmE0",
+  heroBackground:
+    "https://blogger.googleusercontent.com/img/a/AVvXsEgJa5DmqcI1heZCqjHzeWoLQ02zEB3nL4RuUbQ7rBNH5byRsNss7Ztrn4ADO3KW7SsyaX2RqFJGnRuCib8S_8rwM2Mn7FlyLH5h9ME_8iIW_PhHNT9k66W73Auwp_kQQ6yW2k_KQsOKa1c2o5UHKeyAx8__7z-d61YEXs4qgflltwJOxyt4l326-3d7S8E",
+  heroSubject:
+    "https://blogger.googleusercontent.com/img/a/AVvXsEigVZBtLcvw0qlA8aOjLAwCQQoXtAt2Q29Mf101IqoPEnTB_1xc00D3VrCHuYiTgE7Ni-hvSzmem3r9xp30BmYNVPSNreprkTDYM1vW5uuAjgL18giyHl45lAhNmporBeDAgu1bZi7LLOODJiMj2w3UeEI6tMURFo6suZdbRZRaLbF-1mddfewo-5E3mUw",
 };
 
-export const clientGallery = {
-  slug: "samantha-guadalupe-15",
-  title: "Samantha Guadalupe",
-  subtitle: "Quinceaños · 13 Junio 2026",
-  downloadPin: "1328",
-  cover: "https://blogger.googleusercontent.com/img/a/AVvXsEjl9FJHEmGGn99v6gwAVJgC60vv-_-91XsrkwHe6YuB07aF5hrBm-3iTAgy-JkSCLW319f--7Gfrqtp0JXLPN1tI3Rgyq-7dyj612XUdwSEotMv_iVxFmFYA-3dqUS0L_JJzaGrstU2TcZjDT1Fxw4_YDnHK3nhsPH4jBon6rLE1LnhRvZMeNpBmuxv6xA",
-  intro: "Una selección cuidada de momentos naturales, retratos, vals y detalles de decoración capturados durante la celebración.",
-  note: "Vista previa optimizada para web. La entrega final puede prepararse en alta calidad después de confirmar el paquete.",
-};
+export const seaLionArt =
+  "https://blogger.googleusercontent.com/img/a/AVvXsEijmDWn4oCDM4prrw9f1pezhlyJJVqI4Mpe2xmRwzxMfWypqpEilpAhg54z_ZXUfbZXto-QPVC02H-SUQFT5T0WULTbHma6hODuKZVRJnBG2royWc0m-c1QqXpzSQ3nxQ43-RTYrdnn4Wb3RlROi0QoOKLOXb7c69wPYkvbMhaLEYFQTECs7stnJRBr7WI";
 
 const sg = {
   "01": "https://blogger.googleusercontent.com/img/a/AVvXsEiC_Qoi70HIToSXQ4k5kiTIIPnQBPwDS_hH64Tmo0b9qtkwrP06DRiEy6QqsrQV3gATU5BuExE29lZWU0AVonT53h_6gpG4B6S8cmHl6-LtYIv6teWlsVzc1gqzrcjWa64XigjmrdRfr9eI-82wghvoJagTTpG7oxmqSZZovXiCLgseErdzWLwltwczhg4",
@@ -66,46 +72,64 @@ const sg = {
   "22": "https://blogger.googleusercontent.com/img/a/AVvXsEgvPpw-wmn30MXbEe7BshzPJvcR9PsvSoPuFjnVb27rVKY4eYjvZQKXV0FxIC763_g7Dh5repy4VkIv5jQN6NywqU9geoOqYFbTgV5OPtXLD5YuOCjBU2BPiLrY-DyzF8KMGeEHYiHiZlI7h28HUvI_xaOrjYstgTbvcQaaRAedYlpMtQ_1Y2yIr3Gi-tM",
   "23": "https://blogger.googleusercontent.com/img/a/AVvXsEgFuLdqO_QEW6vnECacFBOvt5soQ5BRtp1YatcDTmQnf9rq-wL0huq4IJ6niAF7J0T18A2SYP1v0U0OGtMi6XBNPFj_x4SWYhzDM6SVFidH2osHz8nBCCe_tzS_Hyh8IiARAU9MWQYHfULy0-jxZoKQk5PqG31CbWGGR3o0L9d6eSHwzw9MyRTFZqM5QCY",
   "24": "https://blogger.googleusercontent.com/img/a/AVvXsEgFuLdqO_QEW6vnECacFBOvt5soQ5BRtp1YatcDTmQnf9rq-wL0huq4IJ6niAF7J0T18A2SYP1v0U0OGtMi6XBNPFj_x4SWYhzDM6SVFidH2osHz8nBCCe_tzS_Hyh8IiARAU9MWQYHfULy0-jxZoKQk5PqG31CbWGGR3o0L9d6eSHwzw9MyRTFZqM5QCY",
-};
+} as const;
 
 export const eventPhotos: GalleryPhoto[] = [
-  { code: "SG15-03", title: "Risas con amigas y bengalas", category: "emocion", src: sg["03"], orientation: "vertical", priority: 1 },
-  { code: "SG15-07", title: "Vals con mirada dulce", category: "vals", src: sg["07"], orientation: "vertical", priority: 2 },
-  { code: "SG15-12", title: "Vals entre humo y globos", category: "vals", src: sg["12"], orientation: "vertical", priority: 3 },
-  { code: "SG15-09", title: "Reina en escenario", category: "editorial", src: sg["09"], orientation: "vertical", priority: 4 },
-  { code: "SG15-10", title: "Retrato con acompañante", category: "retrato", src: sg["10"], orientation: "vertical", priority: 5 },
-  { code: "SG15-04", title: "Retrato en mesa dulce", category: "retrato", src: sg["04"], orientation: "horizontal", priority: 6 },
-  { code: "SG15-21", title: "Mesa familiar al atardecer", category: "decoracion", src: sg["21"], orientation: "horizontal", priority: 7 },
-  { code: "SG15-11", title: "Bienvenida del evento", category: "decoracion", src: sg["11"], orientation: "square", priority: 8 },
-  { code: "SG15-24", title: "Decoración principal", category: "decoracion", src: sg["24"], orientation: "horizontal", priority: 9 },
-  { code: "SG15-14", title: "Espejo con nombre y fecha", category: "detalle", src: sg["14"], orientation: "vertical", priority: 10 },
-  { code: "SG15-17", title: "Pastel de quinceaños", category: "detalle", src: sg["17"], orientation: "vertical", priority: 11 },
-  { code: "SG15-18", title: "Detalle del pastel", category: "detalle", src: sg["18"], orientation: "square", priority: 12 },
-  { code: "SG15-15", title: "Copa decorada", category: "detalle", src: sg["15"], orientation: "vertical", priority: 13 },
-  { code: "SG15-16", title: "Trono vacío del evento", category: "decoracion", src: sg["16"], orientation: "square", priority: 14 },
-  { code: "SG15-22", title: "Letras Samy al atardecer", category: "decoracion", src: sg["22"], orientation: "horizontal", priority: 15 },
-  { code: "SG15-23", title: "Lugar y pétalos", category: "decoracion", src: sg["23"], orientation: "vertical", priority: 16 },
-  { code: "SG15-08", title: "Retrato exterior natural", category: "retrato", src: sg["08"], orientation: "vertical", priority: 17 },
-  { code: "SG15-05", title: "Retrato lateral en jardín", category: "retrato", src: sg["05"], orientation: "vertical", priority: 18 },
-  { code: "SG15-20", title: "Retrato serio en jardín", category: "retrato", src: sg["20"], orientation: "vertical", priority: 19 },
-  { code: "SG15-06", title: "Discurso con micrófono", category: "momento", src: sg["06"], orientation: "vertical", priority: 20 },
-  { code: "SG15-01", title: "Entrada en el camino", category: "momento", src: sg["01"], orientation: "vertical", priority: 21 },
-  { code: "SG15-02", title: "Vals detalle de manos", category: "vals", src: sg["02"], orientation: "horizontal", priority: 22 },
-  { code: "SG15-13", title: "Reina en trono dorado", category: "editorial", src: sg["13"], orientation: "vertical", priority: 23 },
-  { code: "SG15-19", title: "Vals mirada baja", category: "vals", src: sg["19"], orientation: "vertical", priority: 24 }
+  { code: "SG15-03", title: "Risas con amigas y bengalas", category: "emocion", src: sg["03"], orientation: "vertical" },
+  { code: "SG15-07", title: "Vals con mirada dulce", category: "vals", src: sg["07"], orientation: "vertical" },
+  { code: "SG15-12", title: "Vals entre humo y globos", category: "vals", src: sg["12"], orientation: "vertical" },
+  { code: "SG15-09", title: "Reina en escenario", category: "editorial", src: sg["09"], orientation: "vertical" },
+  { code: "SG15-10", title: "Retrato con acompañante", category: "retrato", src: sg["10"], orientation: "vertical" },
+  { code: "SG15-04", title: "Retrato en mesa dulce", category: "retrato", src: sg["04"], orientation: "horizontal" },
+  { code: "SG15-21", title: "Mesa familiar al atardecer", category: "decoracion", src: sg["21"], orientation: "horizontal" },
+  { code: "SG15-11", title: "Bienvenida del evento", category: "decoracion", src: sg["11"], orientation: "square" },
+  { code: "SG15-24", title: "Decoración principal", category: "decoracion", src: sg["24"], orientation: "horizontal" },
+  { code: "SG15-14", title: "Espejo con nombre y fecha", category: "detalle", src: sg["14"], orientation: "vertical" },
+  { code: "SG15-17", title: "Pastel de quinceaños", category: "detalle", src: sg["17"], orientation: "vertical" },
+  { code: "SG15-18", title: "Detalle del pastel", category: "detalle", src: sg["18"], orientation: "square" },
+  { code: "SG15-15", title: "Copa decorada", category: "detalle", src: sg["15"], orientation: "vertical" },
+  { code: "SG15-16", title: "Trono vacío del evento", category: "decoracion", src: sg["16"], orientation: "square" },
+  { code: "SG15-22", title: "Letras Samy al atardecer", category: "decoracion", src: sg["22"], orientation: "horizontal" },
+  { code: "SG15-23", title: "Lugar y pétalos", category: "decoracion", src: sg["23"], orientation: "vertical" },
+  { code: "SG15-08", title: "Retrato exterior natural", category: "retrato", src: sg["08"], orientation: "vertical" },
+  { code: "SG15-05", title: "Retrato lateral en jardín", category: "retrato", src: sg["05"], orientation: "vertical" },
+  { code: "SG15-20", title: "Retrato serio en jardín", category: "retrato", src: sg["20"], orientation: "vertical" },
+  { code: "SG15-06", title: "Discurso con micrófono", category: "momento", src: sg["06"], orientation: "vertical" },
+  { code: "SG15-01", title: "Entrada en el camino", category: "momento", src: sg["01"], orientation: "vertical" },
+  { code: "SG15-02", title: "Vals detalle de manos", category: "vals", src: sg["02"], orientation: "horizontal" },
+  { code: "SG15-13", title: "Reina en trono dorado", category: "editorial", src: sg["13"], orientation: "vertical" },
+  { code: "SG15-19", title: "Vals mirada baja", category: "vals", src: sg["19"], orientation: "vertical" },
 ];
 
-export const portfolioHighlights = [
-  { title: "Eventos con intención", description: "Momentos reales, estética editorial y entrega pensada para clientes exigentes.", image: sg["03"] },
-  { title: "Decoración premium", description: "Mesas, ambientes, detalles y espacios fotografiados con orden, luz y presencia comercial.", image: sg["21"] },
-  { title: "Naturaleza Galápagos", description: "Una mirada limpia de paisaje, fauna, aventura y vida salvaje.", image: photographer.profilePhoto },
+export const clientGalleries: ClientGallery[] = [
+  {
+    slug: "samantha-guadalupe-15",
+    aliases: ["alausi15", "alausí15"],
+    title: "Samantha Guadalupe",
+    subtitle: "Quinceaños · 13 de junio de 2026",
+    cover: sg["03"],
+    note:
+      "Esta es una vista previa web para revisar el trabajo. Las fotografías finales en alta calidad se coordinan directamente con Stiven.",
+    contributionMessage:
+      "Hola Stiven, ya revisamos la galería de Samantha Guadalupe. Nos gustó el trabajo y queremos coordinar el aporte y la entrega final en alta calidad.",
+    photos: eventPhotos,
+  },
 ];
 
-export const services = [
-  "Quinceaños y eventos sociales",
-  "Bodas y sesiones editoriales",
-  "Decoración para proveedores",
-  "Retratos profesionales",
-  "Naturaleza y vida salvaje",
-  "Entrega digital para clientes",
-];
+export const portfolioWorks = [
+  { title: "Emoción real", type: "Eventos", image: sg["03"], shape: "tall" },
+  { title: "Retrato editorial", type: "Retratos", image: sg["09"], shape: "standard" },
+  { title: "Detalles que cuentan", type: "Decoración", image: sg["17"], shape: "standard" },
+  { title: "Celebraciones", type: "Quinceaños", image: sg["12"], shape: "wide" },
+  { title: "Galápagos Fine Art", type: "Naturaleza", image: seaLionArt, shape: "wide" },
+  { title: "Momentos espontáneos", type: "Historias", image: sg["06"], shape: "standard" },
+  { title: "Atmósfera y color", type: "Eventos", image: sg["21"], shape: "standard" },
+  { title: "Composición limpia", type: "Editorial", image: sg["13"], shape: "tall" },
+] as const;
+
+export const specialties = [
+  { number: "01", title: "Parejas y maternidad", text: "Sesiones naturales, guiadas y emotivas en playa, ciudad o espacios íntimos.", image: sg["10"] },
+  { number: "02", title: "Eventos", text: "Quinceaños, bodas y celebraciones contadas con orden, emoción y estética editorial.", image: sg["03"] },
+  { number: "03", title: "Retratos", text: "Dirección de pose, luz cuidada y una edición limpia que conserva la identidad.", image: sg["08"] },
+  { number: "04", title: "Naturaleza", text: "Fauna y paisaje de Galápagos con una mirada documental y fine art.", image: seaLionArt },
+] as const;
