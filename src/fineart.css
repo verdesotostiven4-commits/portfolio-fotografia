@@ -42,7 +42,7 @@ main .fineArtCopy > * {
 
 main .fineArtStage img {
   position: absolute !important;
-  left: 53% !important;
+  left: 47% !important;
   bottom: -18px !important;
   width: min(770px, 93%) !important;
   max-width: none !important;
