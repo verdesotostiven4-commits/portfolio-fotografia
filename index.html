@@ -10,7 +10,9 @@
       (function () {
         var path = decodeURIComponent(window.location.pathname).toLowerCase().replace(/\/+$/, "");
         var isClientGallery = path === "/galerias/maternidad-playa" || path === "/maternidad-playa";
+        window.__BYSTIVEN_CLIENT_GALLERY__ = isClientGallery;
         if (isClientGallery) return;
+
         ["/edge.css", "/carousel.css", "/section-blend.css", "/mobile-polish.css"].forEach(function (href) {
           var link = document.createElement("link");
           link.rel = "stylesheet";
@@ -22,23 +24,27 @@
   </head>
   <body>
     <div id="root"></div>
-    <script src="/maternidad-playa.js"></script>
     <script>
       (function () {
-        var path = decodeURIComponent(window.location.pathname).toLowerCase().replace(/\/+$/, "");
-        var isClientGallery = path === "/galerias/maternidad-playa" || path === "/maternidad-playa";
-        if (isClientGallery) return;
-
-        var module = document.createElement("script");
-        module.type = "module";
-        module.src = "/src/main.tsx";
-        document.body.appendChild(module);
-
-        ["/carousel.js", "/portfolio-polish.js", "/smooth-reveal.js", "/mobile-native.js"].forEach(function (src) {
+        function loadScript(src, options) {
           var script = document.createElement("script");
           script.src = src;
-          script.defer = true;
+          if (options && options.type) script.type = options.type;
+          if (options && options.defer) script.defer = true;
+          if (options && options.onload) script.onload = options.onload;
           document.body.appendChild(script);
+        }
+
+        if (window.__BYSTIVEN_CLIENT_GALLERY__) {
+          loadScript("/maternidad-playa-config.js", {
+            onload: function () { loadScript("/maternidad-playa.js"); }
+          });
+          return;
+        }
+
+        loadScript("/src/main.tsx", { type: "module" });
+        ["/carousel.js", "/portfolio-polish.js", "/smooth-reveal.js", "/mobile-native.js"].forEach(function (src) {
+          loadScript(src, { defer: true });
         });
       })();
     </script>
