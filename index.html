@@ -14,11 +14,24 @@
   <body>
     <div id="root"></div>
     <script src="/maternidad-playa.js"></script>
-    <script src="/maternidad-mobile-pro.js" defer></script>
-    <script type="module" src="/src/main.tsx"></script>
-    <script src="/carousel.js" defer></script>
-    <script src="/portfolio-polish.js" defer></script>
-    <script src="/smooth-reveal.js" defer></script>
-    <script src="/mobile-native.js" defer></script>
+    <script>
+      (function () {
+        var path = decodeURIComponent(window.location.pathname).toLowerCase().replace(/\/+$/, "");
+        var isClientGallery = path === "/galerias/maternidad-playa" || path === "/maternidad-playa";
+        if (isClientGallery) return;
+
+        var module = document.createElement("script");
+        module.type = "module";
+        module.src = "/src/main.tsx";
+        document.body.appendChild(module);
+
+        ["/carousel.js", "/portfolio-polish.js", "/smooth-reveal.js", "/mobile-native.js"].forEach(function (src) {
+          var script = document.createElement("script");
+          script.src = src;
+          script.defer = true;
+          document.body.appendChild(script);
+        });
+      })();
+    </script>
   </body>
 </html>
