@@ -6,10 +6,19 @@
     <meta name="theme-color" content="#090909" />
     <meta name="description" content="Portafolio profesional byStiven: fotografía de eventos, quinceaños, decoración, naturaleza y galerías privadas." />
     <title>byStiven · Portfolio Fotografía</title>
-    <link rel="stylesheet" href="/edge.css" />
-    <link rel="stylesheet" href="/carousel.css" />
-    <link rel="stylesheet" href="/section-blend.css" />
-    <link rel="stylesheet" href="/mobile-polish.css" />
+    <script>
+      (function () {
+        var path = decodeURIComponent(window.location.pathname).toLowerCase().replace(/\/+$/, "");
+        var isClientGallery = path === "/galerias/maternidad-playa" || path === "/maternidad-playa";
+        if (isClientGallery) return;
+        ["/edge.css", "/carousel.css", "/section-blend.css", "/mobile-polish.css"].forEach(function (href) {
+          var link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = href;
+          document.head.appendChild(link);
+        });
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
