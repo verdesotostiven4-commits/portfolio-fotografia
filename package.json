@@ -7,10 +7,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "latest",
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "tus-js-client": "latest",
+    "vite": "latest"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
