@@ -15,7 +15,7 @@
     "vite": "latest"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
+    "typescript": "5.8.3",
     "@types/react": "latest",
     "@types/react-dom": "latest"
   }
