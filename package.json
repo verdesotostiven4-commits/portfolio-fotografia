@@ -9,6 +9,7 @@
   "dependencies": {
     "@supabase/supabase-js": "latest",
     "@vitejs/plugin-react": "latest",
+    "fflate": "latest",
     "react": "latest",
     "react-dom": "latest",
     "tus-js-client": "latest",
