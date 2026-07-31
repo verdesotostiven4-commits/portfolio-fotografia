@@ -12,7 +12,7 @@ function loadPublicScript(src: string): void {
 if (isMaternityGallery) {
   void import("./maternidad-gallery-loader");
 } else if (isMaternityAdmin) {
-  void import("./maternidad-admin");
+  void import("./maternidad-admin").then(() => import("./maternidad-admin-pro"));
 } else {
   void import("./main");
   ["/carousel.js", "/portfolio-polish.js", "/smooth-reveal.js", "/mobile-native.js"].forEach(loadPublicScript);
