@@ -13,7 +13,7 @@ function removeManualSoundButtons(): void {
 }
 
 async function playWithPreferredAudio(video: HTMLVideoElement): Promise<void> {
-  if (!video.src) return;
+  if (!video.getAttribute("src")) return;
 
   if (audioUnlocked) {
     video.defaultMuted = false;
@@ -24,7 +24,7 @@ async function playWithPreferredAudio(video: HTMLVideoElement): Promise<void> {
       await video.play();
       return;
     } catch {
-      // Some browser/user settings can still reject audible autoplay.
+      // Browser or user settings can still reject audible autoplay.
     }
   }
 
@@ -33,7 +33,7 @@ async function playWithPreferredAudio(video: HTMLVideoElement): Promise<void> {
   try {
     await video.play();
   } catch {
-    // The poster remains visible when playback is blocked entirely.
+    // Keep the poster visible when playback is blocked entirely.
   }
 }
 
@@ -49,12 +49,12 @@ function unlockAudio(): void {
 
     const rect = video.getBoundingClientRect();
     const visible = rect.bottom > 0 && rect.top < window.innerHeight;
-    if (visible && video.src) void playWithPreferredAudio(video);
+    if (visible && video.getAttribute("src")) void playWithPreferredAudio(video);
   });
 }
 
 function installVisibilityPlayback(): void {
-  const observer = new IntersectionObserver(
+  const visibilityObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const video = entry.target as HTMLVideoElement;
@@ -66,32 +66,25 @@ function installVisibilityPlayback(): void {
     { threshold: [0, 0.45, 0.75] },
   );
 
-  inlineVideos().forEach((video) => observer.observe(video));
+  inlineVideos().forEach((video) => visibilityObserver.observe(video));
 }
 
 function installWhenReady(): void {
-  if (installed) return;
-  const app = document.getElementById("galleryApp");
-  if (!app) return;
+  if (installed || !document.getElementById("galleryApp")) return;
 
   installed = true;
   removeManualSoundButtons();
   installVisibilityPlayback();
 
-  // A normal first interaction unlocks audible playback for the session.
-  ["pointerdown", "touchstart", "keydown"].forEach((eventName) => {
-    document.addEventListener(eventName, unlockAudio, {
-      capture: true,
-      passive: true,
-      once: true,
-    });
-  });
+  document.addEventListener("pointerdown", unlockAudio, { capture: true, once: true });
+  document.addEventListener("touchstart", unlockAudio, { capture: true, passive: true, once: true });
+  document.addEventListener("keydown", unlockAudio, { capture: true, once: true });
 }
 
-const observer = new MutationObserver(() => {
+const galleryObserver = new MutationObserver(() => {
   installWhenReady();
-  if (installed) observer.disconnect();
+  if (installed) galleryObserver.disconnect();
 });
 
-observer.observe(document.documentElement, { childList: true, subtree: true });
+galleryObserver.observe(document.documentElement, { childList: true, subtree: true });
 installWhenReady();
