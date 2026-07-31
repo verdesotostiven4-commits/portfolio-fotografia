@@ -12,6 +12,7 @@ function loadPublicScript(src: string): void {
 if (isMaternityGallery) {
   void import("./maternidad-gallery-loader");
   loadPublicScript("/maternidad-audio-auto.js");
+  loadPublicScript("/maternidad-audio-gate.js");
 } else if (isMaternityAdmin) {
   void import("./maternidad-admin").then(() => import("./maternidad-admin-pro"));
 } else {
