@@ -18,6 +18,39 @@
     return ratio >= (minimumRatio || 0.35);
   }
 
+  function installControlHidingStyles() {
+    if (document.getElementById("maternity-inline-video-clean-styles")) return;
+
+    var style = document.createElement("style");
+    style.id = "maternity-inline-video-clean-styles";
+    style.textContent = [
+      "video[data-inline-video]{pointer-events:none!important;-webkit-user-select:none!important;user-select:none!important}",
+      "video[data-inline-video]::-webkit-media-controls{display:none!important;-webkit-appearance:none!important}",
+      "video[data-inline-video]::-webkit-media-controls-enclosure{display:none!important}",
+      "video[data-inline-video]::-webkit-media-controls-panel{display:none!important}",
+      "video[data-inline-video]::-webkit-media-controls-overlay-play-button{display:none!important;-webkit-appearance:none!important}",
+      "video[data-inline-video]::-webkit-media-controls-start-playback-button{display:none!important;-webkit-appearance:none!important}",
+      "video[data-inline-video]::-webkit-media-controls-play-button{display:none!important}",
+      "video[data-inline-video]::-webkit-media-controls-cast-button{display:none!important}",
+      "video[data-inline-video]::-internal-media-controls-overlay-cast-button{display:none!important}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function suppressBrowserVideoControls(video) {
+    video.controls = false;
+    video.removeAttribute("controls");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.setAttribute("controlslist", "noremoteplayback nodownload nofullscreen");
+    video.setAttribute("x-webkit-airplay", "deny");
+    video.setAttribute("disablepictureinpicture", "");
+    video.setAttribute("disableremoteplayback", "");
+    video.disablePictureInPicture = true;
+    video.disableRemotePlayback = true;
+    video.style.pointerEvents = "none";
+  }
+
   function removeManualSoundButtons() {
     document.querySelectorAll("[data-sound]").forEach(function (button) {
       button.remove();
@@ -38,6 +71,8 @@
   function playInline(video) {
     if (!video || !video.getAttribute("src")) return;
 
+    suppressBrowserVideoControls(video);
+
     if (audioUnlocked) {
       setAudible(video);
       video.play().catch(function () {
@@ -55,6 +90,7 @@
 
   function tryVisibleVideos() {
     inlineVideos().forEach(function (video) {
+      suppressBrowserVideoControls(video);
       if (isVisible(video, 0.35)) playInline(video);
       else if (!video.paused) video.pause();
     });
@@ -64,6 +100,7 @@
     audioUnlocked = true;
 
     inlineVideos().forEach(function (video) {
+      suppressBrowserVideoControls(video);
       setAudible(video);
       if (isVisible(video, 0.2) && video.getAttribute("src")) {
         video.play().catch(function () {});
@@ -76,36 +113,43 @@
   }
 
   function installVideoHooks(video) {
+    suppressBrowserVideoControls(video);
+
     if (video.dataset.audioAutoReady === "true") return;
     video.dataset.audioAutoReady = "true";
 
     video.addEventListener("loadedmetadata", function () {
+      suppressBrowserVideoControls(video);
       if (audioUnlocked && isVisible(video, 0.2)) playInline(video);
     });
 
     video.addEventListener("canplay", function () {
+      suppressBrowserVideoControls(video);
       if (audioUnlocked && isVisible(video, 0.2)) playInline(video);
     });
 
     video.addEventListener("play", function () {
+      suppressBrowserVideoControls(video);
       if (audioUnlocked) setAudible(video);
     });
 
     var sourceObserver = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
+        suppressBrowserVideoControls(video);
         if (mutation.attributeName === "src" && audioUnlocked && isVisible(video, 0.2)) {
           playInline(video);
         }
       });
     });
 
-    sourceObserver.observe(video, { attributes: true, attributeFilter: ["src", "muted"] });
+    sourceObserver.observe(video, { attributes: true, attributeFilter: ["src", "muted", "controls"] });
   }
 
   function installVisibilityPlayback() {
     visibilityObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var video = entry.target;
+        suppressBrowserVideoControls(video);
         if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
           playInline(video);
         } else if (!entry.isIntersecting || entry.intersectionRatio < 0.12) {
@@ -135,11 +179,13 @@
     if (installed || !document.getElementById("galleryApp")) return;
 
     installed = true;
+    installControlHidingStyles();
     removeManualSoundButtons();
     installVisibilityPlayback();
     installInteractionUnlock();
 
     retryTimer = window.setInterval(function () {
+      installControlHidingStyles();
       removeManualSoundButtons();
       inlineVideos().forEach(installVideoHooks);
       if (audioUnlocked) tryVisibleVideos();
