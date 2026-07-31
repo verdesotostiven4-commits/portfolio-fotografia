@@ -1,4 +1,4 @@
-import { galleryBucket, getSupabase, hasSupabaseConfig, publicObjectUrl } from "./supabase-client";
+import { galleryBucket, hasSupabaseConfig, publicObjectUrl } from "./supabase-client";
 
 type MediaType = "image" | "video";
 
@@ -23,6 +23,7 @@ interface GalleryManifest {
   brand?: string;
   instagram?: string;
   zipPath?: string;
+  coverIndex?: number;
   media?: GalleryMediaItem[];
 }
 
@@ -55,19 +56,18 @@ function fallbackGallery(): Record<string, unknown> {
     brand: "byStiven",
     instagram: "https://www.instagram.com/bystiven/",
     zipUrl: "",
+    coverIndex: 0,
     photos: [],
   };
 }
 
 async function fetchManifest(): Promise<GalleryManifest | null> {
   if (!hasSupabaseConfig()) return null;
-
   const manifestUrl = publicObjectUrl(manifestPath);
   const response = await fetch(`${manifestUrl}?v=${Date.now()}`, {
     cache: "no-store",
     headers: { Accept: "application/json" },
   });
-
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`No se pudo leer el manifiesto (${response.status}).`);
   return (await response.json()) as GalleryManifest;
@@ -95,6 +95,7 @@ function mapManifest(manifest: GalleryManifest | null): Record<string, unknown> 
   return {
     ...fallback,
     ...manifest,
+    coverIndex: Number.isFinite(Number(manifest.coverIndex)) ? Number(manifest.coverIndex) : 0,
     zipUrl: manifest.zipPath ? publicObjectUrl(manifest.zipPath, "MATERNIDAD-COMPLETA.zip") : "",
     photos,
     bucket: galleryBucket,
@@ -111,8 +112,7 @@ async function start(): Promise<void> {
     window.BYSTIVEN_MATERNIDAD.connectionError = true;
   }
 
-  await loadScript("/maternidad-playa.js");
-  await loadScript("/maternidad-media-pro.js");
+  await loadScript("/maternidad-playa.js?v=4");
 }
 
 void start();
