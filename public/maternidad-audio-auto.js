@@ -1,13 +1,15 @@
 (function () {
   "use strict";
 
-  var audioUnlocked = false;
   var installed = false;
+  var audioUnlocked = false;
   var visibilityObserver = null;
+  var preloadObserver = null;
   var retryTimer = null;
+  var lastGestureAt = 0;
 
   function inlineVideos() {
-    return Array.prototype.slice.call(document.querySelectorAll("[data-inline-video]"));
+    return Array.prototype.slice.call(document.querySelectorAll("video[data-inline-video]"));
   }
 
   function isVisible(video, minimumRatio) {
@@ -15,7 +17,7 @@
     var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
     var visibleHeight = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0));
     var ratio = rect.height > 0 ? visibleHeight / rect.height : 0;
-    return ratio >= (minimumRatio || 0.35);
+    return ratio >= (minimumRatio || 0.3);
   }
 
   function installControlHidingStyles() {
@@ -46,8 +48,8 @@
     video.setAttribute("x-webkit-airplay", "deny");
     video.setAttribute("disablepictureinpicture", "");
     video.setAttribute("disableremoteplayback", "");
-    video.disablePictureInPicture = true;
-    video.disableRemotePlayback = true;
+    try { video.disablePictureInPicture = true; } catch (_) {}
+    try { video.disableRemotePlayback = true; } catch (_) {}
     video.style.pointerEvents = "none";
   }
 
@@ -55,10 +57,76 @@
     document.querySelectorAll("[data-sound]").forEach(function (button) {
       button.remove();
     });
-
     document.querySelectorAll(".gVideoCaption").forEach(function (caption) {
       caption.style.justifyContent = "flex-start";
     });
+  }
+
+  function publicRootFromPoster(video) {
+    var poster = video.getAttribute("poster") || "";
+    var marker = "/maternidad-playa/";
+    var markerIndex = poster.indexOf(marker);
+    return markerIndex >= 0 ? poster.slice(0, markerIndex) : "";
+  }
+
+  function attachSource(video) {
+    if (video.getAttribute("src")) return true;
+    var source = video.dataset.inlineSource || "";
+    if (!source) return false;
+
+    video.preload = "auto";
+    video.src = source;
+    video.load();
+    return true;
+  }
+
+  async function prepareVideoSources() {
+    var videos = inlineVideos();
+    if (!videos.length) return;
+
+    videos.forEach(function (video) {
+      suppressBrowserVideoControls(video);
+      video.preload = "metadata";
+    });
+
+    var publicRoot = publicRootFromPoster(videos[0]);
+    if (!publicRoot) return;
+
+    try {
+      var response = await fetch(publicRoot + "/maternidad-playa/manifest.json?v=" + Date.now(), {
+        cache: "no-store",
+        headers: { Accept: "application/json" }
+      });
+      if (!response.ok) return;
+
+      var manifest = await response.json();
+      var media = Array.isArray(manifest.media) ? manifest.media : [];
+
+      videos.forEach(function (video) {
+        var index = Number(video.dataset.inlineVideo);
+        var item = media[index];
+        if (!item || item.type !== "video" || !item.originalPath) return;
+        video.dataset.inlineSource = publicRoot + "/" + String(item.originalPath).replace(/^\/+/, "");
+      });
+
+      installPreloader();
+    } catch (_) {
+      // La galería principal seguirá colocando la fuente como respaldo.
+    }
+  }
+
+  function bufferedSeconds(video) {
+    try {
+      if (!video.buffered || !video.buffered.length) return 0;
+      for (var index = 0; index < video.buffered.length; index += 1) {
+        if (video.currentTime >= video.buffered.start(index) && video.currentTime <= video.buffered.end(index)) {
+          return Math.max(0, video.buffered.end(index) - video.currentTime);
+        }
+      }
+      return Math.max(0, video.buffered.end(video.buffered.length - 1) - video.currentTime);
+    } catch (_) {
+      return 0;
+    }
   }
 
   function setAudible(video) {
@@ -68,95 +136,116 @@
     video.volume = 1;
   }
 
-  function playInline(video) {
-    if (!video || !video.getAttribute("src")) return;
-
-    suppressBrowserVideoControls(video);
-
-    if (audioUnlocked) {
-      setAudible(video);
-      video.play().catch(function () {
-        video.defaultMuted = true;
-        video.muted = true;
-        video.play().catch(function () {});
-      });
-      return;
-    }
-
+  function setSilent(video) {
     video.defaultMuted = true;
     video.muted = true;
-    video.play().catch(function () {});
+    video.setAttribute("muted", "");
+  }
+
+  function playInline(video, preferAudio) {
+    if (!attachSource(video)) return;
+
+    if (preferAudio && audioUnlocked) setAudible(video);
+    else setSilent(video);
+
+    video.preload = "auto";
+    var promise = video.play();
+    if (promise && typeof promise.catch === "function") {
+      promise.catch(function () {
+        if (!video.muted) {
+          setSilent(video);
+          video.play().catch(function () {});
+        }
+      });
+    }
+  }
+
+  function playVisibleFromGesture() {
+    var now = Date.now();
+    if (now - lastGestureAt < 120) return;
+    lastGestureAt = now;
+    audioUnlocked = true;
+
+    inlineVideos().forEach(function (video) {
+      if (!isVisible(video, 0.12)) return;
+      attachSource(video);
+      setAudible(video);
+      video.preload = "auto";
+      var promise = video.play();
+      if (promise && typeof promise.catch === "function") {
+        promise.catch(function () {
+          // El observador volverá a intentarlo al terminar de cargar.
+        });
+      }
+    });
   }
 
   function tryVisibleVideos() {
     inlineVideos().forEach(function (video) {
-      suppressBrowserVideoControls(video);
-      if (isVisible(video, 0.35)) playInline(video);
-      else if (!video.paused) video.pause();
-    });
-  }
-
-  function unlockAndPlayVisible() {
-    audioUnlocked = true;
-
-    inlineVideos().forEach(function (video) {
-      suppressBrowserVideoControls(video);
-      setAudible(video);
-      if (isVisible(video, 0.2) && video.getAttribute("src")) {
-        video.play().catch(function () {});
+      if (isVisible(video, 0.3)) {
+        playInline(video, true);
+      } else if (!video.paused) {
+        video.pause();
       }
     });
-
-    window.setTimeout(tryVisibleVideos, 0);
-    window.setTimeout(tryVisibleVideos, 120);
-    window.setTimeout(tryVisibleVideos, 350);
   }
 
   function installVideoHooks(video) {
-    suppressBrowserVideoControls(video);
-
     if (video.dataset.audioAutoReady === "true") return;
     video.dataset.audioAutoReady = "true";
+    suppressBrowserVideoControls(video);
 
     video.addEventListener("loadedmetadata", function () {
-      suppressBrowserVideoControls(video);
-      if (audioUnlocked && isVisible(video, 0.2)) playInline(video);
+      if (isVisible(video, 0.15)) playInline(video, true);
     });
 
     video.addEventListener("canplay", function () {
-      suppressBrowserVideoControls(video);
-      if (audioUnlocked && isVisible(video, 0.2)) playInline(video);
+      if (isVisible(video, 0.15)) playInline(video, true);
     });
 
-    video.addEventListener("play", function () {
-      suppressBrowserVideoControls(video);
-      if (audioUnlocked) setAudible(video);
+    video.addEventListener("progress", function () {
+      if (audioUnlocked && isVisible(video, 0.2) && bufferedSeconds(video) >= 2.5) {
+        playInline(video, true);
+      }
     });
 
-    var sourceObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        suppressBrowserVideoControls(video);
-        if (mutation.attributeName === "src" && audioUnlocked && isVisible(video, 0.2)) {
-          playInline(video);
+    video.addEventListener("waiting", function () {
+      if (bufferedSeconds(video) < 0.8) video.pause();
+    });
+  }
+
+  function installPreloader() {
+    if (preloadObserver) preloadObserver.disconnect();
+
+    preloadObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var video = entry.target;
+        if (attachSource(video)) {
+          video.preload = "auto";
+          video.load();
         }
+        preloadObserver.unobserve(video);
       });
-    });
+    }, { rootMargin: "1800px 0px", threshold: 0 });
 
-    sourceObserver.observe(video, { attributes: true, attributeFilter: ["src", "muted", "controls"] });
+    inlineVideos().forEach(function (video) {
+      installVideoHooks(video);
+      preloadObserver.observe(video);
+    });
   }
 
   function installVisibilityPlayback() {
     visibilityObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var video = entry.target;
-        suppressBrowserVideoControls(video);
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
-          playInline(video);
-        } else if (!entry.isIntersecting || entry.intersectionRatio < 0.12) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+          playInline(video, true);
+        } else if (!entry.isIntersecting || entry.intersectionRatio < 0.1) {
           video.pause();
         }
       });
-    }, { threshold: [0, 0.12, 0.35, 0.55, 0.8] });
+    }, { threshold: [0, 0.1, 0.3, 0.55, 0.8] });
 
     inlineVideos().forEach(function (video) {
       installVideoHooks(video);
@@ -165,14 +254,10 @@
   }
 
   function installInteractionUnlock() {
-    document.addEventListener("touchend", unlockAndPlayVisible, { capture: true, passive: true });
-    document.addEventListener("pointerup", unlockAndPlayVisible, { capture: true });
-    document.addEventListener("click", unlockAndPlayVisible, { capture: true });
-    document.addEventListener("keydown", unlockAndPlayVisible, { capture: true });
-
-    document.addEventListener("touchstart", function () {
-      audioUnlocked = true;
-    }, { capture: true, passive: true, once: true });
+    document.addEventListener("touchend", playVisibleFromGesture, { capture: true, passive: true });
+    document.addEventListener("pointerup", playVisibleFromGesture, { capture: true });
+    document.addEventListener("click", playVisibleFromGesture, { capture: true });
+    document.addEventListener("keydown", playVisibleFromGesture, { capture: true });
   }
 
   function installWhenReady() {
@@ -183,17 +268,18 @@
     removeManualSoundButtons();
     installVisibilityPlayback();
     installInteractionUnlock();
+    void prepareVideoSources();
 
     retryTimer = window.setInterval(function () {
-      installControlHidingStyles();
       removeManualSoundButtons();
       inlineVideos().forEach(installVideoHooks);
       if (audioUnlocked) tryVisibleVideos();
-    }, 700);
+    }, 900);
 
     window.addEventListener("pagehide", function () {
       if (retryTimer) window.clearInterval(retryTimer);
       if (visibilityObserver) visibilityObserver.disconnect();
+      if (preloadObserver) preloadObserver.disconnect();
     }, { once: true });
   }
 
